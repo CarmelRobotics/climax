@@ -45,12 +45,12 @@ public class RobotContainer {
     // Configure the trigger bindings
         configureBindings();
       SwerveCommand driveBase = new SwerveCommand(drivebase,
-                                                                         () ->
-                                                                             MathUtil.applyDeadband(m_controller1.getY(),
-                                                                                                    OperatorConstants.LEFT_Y_DEADBAND),
-                                                                         () -> MathUtil.applyDeadband(m_controller1.getX(),
-                                                                                                      OperatorConstants.LEFT_X_DEADBAND),
-                                                                         () -> m_guitar.getRawAxis(1));
+                                                            () ->
+                                                                MathUtil.applyDeadband(m_controller1.getY(),
+                                                                                      OperatorConstants.LEFT_Y_DEADBAND),
+                                                            () -> MathUtil.applyDeadband(m_controller1.getX(),
+                                                                                        OperatorConstants.LEFT_X_DEADBAND),
+                                                            () -> m_guitar.getRawAxis(1));
       drivebase.setDefaultCommand(driveBase);
 
   }

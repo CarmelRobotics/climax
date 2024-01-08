@@ -44,7 +44,10 @@ public final class Constants
 
   public static class OperatorConstants
   {
-
+    // Controller Ports
+    public static final int JOYSTICK_1_PORT = 0;
+    public static final int JOYSTICK_2_PORT = 1;
+    public static final int GUITAR_PORT = 2;
     // Joystick Deadband
     public static final double LEFT_X_DEADBAND = 0.01;
     public static final double LEFT_Y_DEADBAND = 0.01;
