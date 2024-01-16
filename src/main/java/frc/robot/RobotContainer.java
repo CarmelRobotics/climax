@@ -7,7 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.SwerveCommand;
+import frc.robot.commands.SwerveCommandField;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -44,7 +44,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
         configureBindings();
-      SwerveCommand driveBase = new SwerveCommand(drivebase,
+      SwerveCommandField driveBase = new SwerveCommandField(drivebase,
                                                             () ->
                                                                 MathUtil.applyDeadband(m_controller1.getY(),
                                                                                       OperatorConstants.LEFT_Y_DEADBAND),

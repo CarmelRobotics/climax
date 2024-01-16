@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.List;
@@ -19,7 +19,7 @@ import swervelib.math.SwerveMath;
 /**
  * An example command that uses an example subsystem.
  */
-public class SwerveCommand extends CommandBase
+public class SwerveCommandField extends Command
 {
 
   private final SwerveSubsystem swerve;
@@ -39,7 +39,7 @@ public class SwerveCommand extends CommandBase
    *                station glass.
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
-  public SwerveCommand(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
+  public SwerveCommandField(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
                             DoubleSupplier heading)
   {
     this.swerve = swerve;
