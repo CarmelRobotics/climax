@@ -19,7 +19,7 @@ import swervelib.math.SwerveMath;
 /**
  * An example command that uses an example subsystem.
  */
-public class SwerveCommand extends Command
+public class SwerveCommandField extends Command
 {
 
   private final SwerveSubsystem swerve;
@@ -39,7 +39,7 @@ public class SwerveCommand extends Command
    *                station glass.
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
-  public SwerveCommand(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
+  public SwerveCommandField(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
                             DoubleSupplier heading)
   {
     this.swerve = swerve;
