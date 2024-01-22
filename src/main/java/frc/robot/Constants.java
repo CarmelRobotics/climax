@@ -39,7 +39,10 @@ public final class Constants
   {
 
     // Hold time on motor brakes when disabled
-    public static final double WHEEL_LOCK_TIME = 10; // seconds
+    public static final double WHEEL_LOCK_TIME =  10; // seconds
+    public static final double WHEEL_RADIUS =     4; // inches
+    public static final double DRIVE_GEAR_RATIO = 8.14; // gear ratios
+    public static final double ANGLE_GEAR_RATIO = 12.8; // gear ratios
   }
 
   public static class OperatorConstants
