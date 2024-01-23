@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -40,6 +41,13 @@ public final class Constants
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
+  }
+  public static final class Shooter
+  {
+    public static final int SHOOTER_MOTORONE_CAN = 14;
+    public static final int SHOOTER_MOTORTWO_CAN = 15;
+    public static final int SHOOTER_PIVOT_CAN = 16;
+    public static final PIDController PIVOT_CONTROLLER = new PIDController(0.001, 0, 0.007);
   }
 
   public static class OperatorConstants
