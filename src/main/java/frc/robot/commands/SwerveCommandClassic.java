@@ -31,7 +31,7 @@ public class SwerveCommandClassic extends Command
    * @param swerve The subsystem used by this command.
    */
   public SwerveCommandClassic(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier omega,
-                     BooleanSupplier driveMode)
+                              BooleanSupplier driveMode)
   {
     this.swerve = swerve;
     this.vX = vX;
@@ -58,7 +58,7 @@ public class SwerveCommandClassic extends Command
     double angVelocity = Math.pow(omega.getAsDouble(), 3);
     SmartDashboard.putNumber("vX", xVelocity);
     SmartDashboard.putNumber("vY", yVelocity);
-    SmartDashboard.putNumber("omega", angVelocity);
+    SmartDashboard.putNumber("vAngle", angVelocity);
 
     // Drive using raw values.
     swerve.drive(new Translation2d(xVelocity * swerve.maximumSpeed, yVelocity * swerve.maximumSpeed),
