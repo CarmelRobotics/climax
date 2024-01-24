@@ -45,9 +45,9 @@ public class RobotContainer {
     // Configure the trigger bindings
         configureBindings();
         Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-          () -> MathUtil.applyDeadband(m_controller1.getY(), OperatorConstants.LEFT_Y_DEADBAND),
-          () -> MathUtil.applyDeadband(m_controller1.getX(), OperatorConstants.LEFT_X_DEADBAND),
-          () -> m_controller2.getY());
+          () -> MathUtil.applyDeadband(m_controller1.getRawAxis(0), OperatorConstants.LEFT_Y_DEADBAND),
+          () -> MathUtil.applyDeadband(m_controller1.getRawAxis(1), OperatorConstants.LEFT_X_DEADBAND),
+          () -> m_controller1.getRawAxis(2));
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
   }
