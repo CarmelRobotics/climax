@@ -328,6 +328,9 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return swerveDrive.getFieldVelocity();
   }
+  public Translation2d getPosition(){
+    return swerveDrive.getPose().getTranslation();
+  }
 
   /**
    * Gets the current velocity (x, y and omega) of the robot
