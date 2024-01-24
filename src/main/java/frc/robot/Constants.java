@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
@@ -45,6 +46,12 @@ public final class Constants
     public static final double WHEEL_RADIUS =     4; // inches
     public static final double DRIVE_GEAR_RATIO = 8.14; // gear ratios
     public static final double ANGLE_GEAR_RATIO = 12.8; // gear ratios
+  }
+  public static final class Shooter{
+    public final static int SHOOTER_MOTORONE_CAN = 14;
+    public final static int SHOOTER_MOTORTWO_CAN = 15;
+    public final static int SHOOTER_PIVOT_CAN = 16;
+    public final static PIDController SHOOTER_CONTROLLER = new PIDController(0.01, 0, 0.01);
   }
   public static final class Intake
   {

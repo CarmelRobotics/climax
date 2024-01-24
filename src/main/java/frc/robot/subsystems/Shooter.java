@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
         shootmotortwo = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORTWO_CAN);
         pivotmotor = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_PIVOT_CAN);
         pivotmotor.setPosition(90);
-        pivotController = Constants.Shooter.PIVOT_CONTROLLER;
+        pivotController = Constants.Shooter.SHOOTER_CONTROLLER;
         swerve = s;
     }
     @Override
