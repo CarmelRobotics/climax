@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
+   
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 import java.io.File;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
@@ -34,6 +36,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase
 {
+  
 
   /**
    * Swerve drive object.
@@ -93,6 +96,17 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
   /**
+   * Construct the swerve drive.
+   *
+   * @param driveCfg      SwerveDriveConfiguration for the swerve.
+   * @param controllerCfg Swerve Controller.
+   */
+  public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
+  {
+    swerveDrive = new SwerveDrive(driveCfg, controllerCfg, maximumSpeed);
+  }
+
+  /**
    * Setup AutoBuilder for PathPlanner.
    */
   public void setupPathPlanner()
@@ -117,6 +131,12 @@ public class SwerveSubsystem extends SubsystemBase
                                          // Default path replanning config. See the API for the options here
         ),
         () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          var alliance = DriverStation.getAlliance();
+          return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+        },
           // Boolean supplier that controls when the path will be mirrored for the red alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
@@ -225,7 +245,37 @@ public class SwerveSubsystem extends SubsystemBase
    * @return Drive command.
    */
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
+  public Command simDriveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotation)
   {
+    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
+    return run(() -> {
+      // Make the robot move
+      driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(translationX.getAsDouble(),
+                                                                      translationY.getAsDouble(),
+                                                                      rotation.getAsDouble() * Math.PI,
+                                                                      swerveDrive.getYaw().getRadians(),
+                                                                      swerveDrive.getMaximumVelocity()));
+    });
+  }
+
+  /**
+   * Command to drive the robot using translative values and heading as angular velocity.
+   *
+   * @param translationX     Translation in the X direction. Cubed for smoother controls.
+   * @param translationY     Translation in the Y direction. Cubed for smoother controls.
+   * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
+   * @return Drive command.
+   */
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
+  {
+    return run(() -> {
+      // Make the robot move
+      swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
+                                          Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity()),
+                        Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
+                        true,
+                        false);
+    });
     return run(() -> {
       // Make the robot move
       swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
@@ -419,6 +469,9 @@ public class SwerveSubsystem extends SubsystemBase
   public ChassisSpeeds getFieldVelocity()
   {
     return swerveDrive.getFieldVelocity();
+  }
+  public Translation2d getPosition(){
+    return swerveDrive.getPose().getTranslation();
   }
 
   /**

@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
 import swervelib.math.Matter;
 import swervelib.parser.PIDFConfig;
 
@@ -43,6 +46,26 @@ public final class Constants
     public static final double WHEEL_RADIUS =     4; // inches
     public static final double DRIVE_GEAR_RATIO = 8.14; // gear ratios
     public static final double ANGLE_GEAR_RATIO = 12.8; // gear ratios
+  }
+  public static final class Shooter{
+    public final static int SHOOTER_MOTORONE_CAN = 14;
+    public final static int SHOOTER_MOTORTWO_CAN = 15;
+    public final static int SHOOTER_PIVOT_CAN = 16;
+    public final static PIDController SHOOTER_CONTROLLER = new PIDController(0.01, 0, 0.01);
+  }
+  public static final class Intake
+  {
+    public static final int DISTSENSOR_ANALOG_ID = 4;
+    public static final int INTAKE_CAN_ONE = 17;
+    public static final int INTAKE_CAN_TWO = 18;
+    public static final I2C.Port i2cPort = I2C.Port.kOnboard;
+  }
+  public static final class FieldConstants{
+    public static final int SPEAKER_HEIGHT = 7 * 12;
+    public static final double SPEAKER_X_BLUE = 0;
+    public static final double SPEAKER_X_RED = 54;
+
+
   }
 
   public static class OperatorConstants
