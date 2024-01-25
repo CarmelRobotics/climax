@@ -51,11 +51,6 @@ public class RobotContainer {
           () -> MathUtil.applyDeadband(m_controller1.getRawAxis(1), OperatorConstants.LEFT_X_DEADBAND),
           () -> m_controller2.getX());
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-        Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-          () -> MathUtil.applyDeadband(m_controller1.getY(), OperatorConstants.LEFT_Y_DEADBAND),
-          () -> MathUtil.applyDeadband(m_controller1.getX(), OperatorConstants.LEFT_X_DEADBAND),
-          () -> m_controller2.getY());
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
   }
 
