@@ -34,8 +34,8 @@ public final class Constants
     public static final PIDFConfig yAutoPID     = new PIDFConfig(0.7, 0, 0);
     public static final PIDFConfig angleAutoPID = new PIDFConfig(0.4, 0, 0.01);
 
-    public static final double MAX_SPEED        = 4;
-    public static final double MAX_ACCELERATION = 2;
+    public static final double MAX_SPEED        = 1;
+    public static final double MAX_ACCELERATION = 1;
   }
 
   public static final class Drivebase
@@ -44,7 +44,7 @@ public final class Constants
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME =  10; // seconds
     public static final double WHEEL_RADIUS =     4; // inches
-    public static final double DRIVE_GEAR_RATIO = 8.14; // gear ratios
+    public static final double DRIVE_GEAR_RATIO = 6.75; // gear ratios
     public static final double ANGLE_GEAR_RATIO = 12.8; // gear ratios
   }
   public static final class Shooter{

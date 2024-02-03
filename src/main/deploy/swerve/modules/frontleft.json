@@ -5,14 +5,14 @@
   },
   "absoluteEncoderOffset": 217,
   "drive": {
-    "type": "sparkmax",
+    "type": "talonfx",
     "id": 1,
-    "canbus": null
+    "canbus": "rio"
   },
   "angle": {
-    "type": "sparkmax",
+    "type": "talonfx",
     "id": 2,
-    "canbus": null
+    "canbus": "rio"
   },
   "conversionFactor": {
     "angle": 28.125,
