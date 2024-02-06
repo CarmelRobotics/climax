@@ -3,45 +3,61 @@ package frc.robot.subsystems;
 import java.sql.Driver;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.jni.CANSparkMaxJNI;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.FieldConstants;
 
 public class Shooter extends SubsystemBase {
     private TalonFX shootmotorone;
     private TalonFX shootmotortwo;
-    private TalonFX pivotmotor;
+    private CANSparkMax pivotmotorone;
+    private CANSparkMax pivotmotortwo;
+    
     public double currentAngle;
     private double amountMove;
+    private double targetAngle;
     SwerveSubsystem swerve;
     PIDController pivotController;
     public Shooter(SwerveSubsystem s){
+
         shootmotorone = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORONE_CAN);
         shootmotortwo = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORTWO_CAN);
-        pivotmotor = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_PIVOT_CAN);
-        pivotmotor.setPosition(90);
+        //pivotmotor = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_PIVOT_CAN);
+        pivotmotorone = new CANSparkMax(frc.robot.Constants.Shooter.SHOOTER_PIVOTONE_CAN, MotorType.kBrushless);
+        pivotmotortwo = new CANSparkMax(frc.robot.Constants.Shooter.SHOOTER_PIVOTTWO_CAN, MotorType.kBrushless);
+        pivotmotortwo.follow(pivotmotorone);
         pivotController = Constants.Shooter.SHOOTER_CONTROLLER;
         swerve = s;
     }
     @Override
     public void periodic(){
-        currentAngle = ((pivotmotor.getPosition().getValue()) % 1);
+        currentAngle = pivotmotorone.getEncoder().getPosition();
+        pivotmotorone.set(pivotController.calculate(currentAngle, targetAngle));
     }
     public void shoot(double speed){
         shootmotorone.set(speed);
         shootmotortwo.set(-speed);
     }
     public void pivot(double speed){
-        pivotmotor.set(speed);
+        pivotmotorone.set(speed);
     }
     public void pivotToAngle(double angle){
-        pivotmotor.set(pivotController.calculate(currentAngle, angle));
-
+        targetAngle = angle;
     }
-    public void autoAim(){
+    public void autoShoot(){
         pivotToAngle(getSpeakerAngle(swerve));
+        shoot(1);
+    }
+    public void AutoShootAmp(){
+        pivotToAngle(FieldConstants.AMP_ANGLE);
+        shoot(1);
     }
     public double getSpeakerAngle(SwerveSubsystem drive){
         if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){

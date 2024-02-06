@@ -50,21 +50,23 @@ public final class Constants
   public static final class Shooter{
     public final static int SHOOTER_MOTORONE_CAN = 14;
     public final static int SHOOTER_MOTORTWO_CAN = 15;
-    public final static int SHOOTER_PIVOT_CAN = 16;
+    public final static int SHOOTER_PIVOTONE_CAN = 16;
+    public final static int SHOOTER_PIVOTTWO_CAN = 17;
+
     public final static PIDController SHOOTER_CONTROLLER = new PIDController(0.01, 0, 0.01);
   }
   public static final class Intake
   {
     public static final int DISTSENSOR_ANALOG_ID = 4;
-    public static final int INTAKE_CAN_ONE = 17;
-    public static final int INTAKE_CAN_TWO = 18;
+    public static final int INTAKE_CAN_ONE = 18;
+    public static final int INTAKE_CAN_TWO = 19;
     public static final I2C.Port i2cPort = I2C.Port.kOnboard;
   }
   public static final class FieldConstants{
     public static final int SPEAKER_HEIGHT = 7 * 12;
     public static final double SPEAKER_X_BLUE = 0;
     public static final double SPEAKER_X_RED = 54;
-
+    public static final double AMP_ANGLE = 45;
 
   }
 
