@@ -67,9 +67,10 @@ public final class Constants
     public static final double SPEAKER_X_BLUE = 0;
     public static final double SPEAKER_X_RED = 54;
     public static final double AMP_ANGLE = 45;
-
   }
-
+  public static final class BTS{
+    public static final int BTS_MOTOR_CAN = 10;
+  }
   public static class OperatorConstants
   {
     // Controller Ports
