@@ -19,6 +19,7 @@ public class Shooter extends SubsystemBase {
     private TalonFX shootmotortwo;
     private CANSparkMax pivotmotorone;
     private CANSparkMax pivotmotortwo;
+    private CANSparkMax pivotmotorthree;
     
     public double currentAngle;
     private double amountMove;
@@ -32,7 +33,9 @@ public class Shooter extends SubsystemBase {
         //pivotmotor = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_PIVOT_CAN);
         pivotmotorone = new CANSparkMax(frc.robot.Constants.Shooter.SHOOTER_PIVOTONE_CAN, MotorType.kBrushless);
         pivotmotortwo = new CANSparkMax(frc.robot.Constants.Shooter.SHOOTER_PIVOTTWO_CAN, MotorType.kBrushless);
+        pivotmotorthree = new CANSparkMax(frc.robot.Constants.Shooter.SHOOTER_PIVOTTHREE_CAN, MotorType.kBrushless);
         pivotmotortwo.follow(pivotmotorone);
+        pivotmotorthree.follow(pivotmotorone);
         pivotController = Constants.Shooter.SHOOTER_CONTROLLER;
         swerve = s;
     }
