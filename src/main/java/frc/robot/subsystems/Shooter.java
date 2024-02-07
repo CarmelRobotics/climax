@@ -42,7 +42,10 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic(){
         currentAngle = pivotmotorone.getEncoder().getPosition();
+        System.out.println(currentAngle);
+        System.out.println(targetAngle);
         pivotmotorone.set(pivotController.calculate(currentAngle, targetAngle));
+
     }
     public void shoot(double speed){
         shootmotorone.set(speed);
@@ -50,6 +53,9 @@ public class Shooter extends SubsystemBase {
     }
     public void pivot(double speed){
         pivotmotorone.set(speed);
+    }
+    public double getPosition(){
+        return pivotmotorone.getEncoder().getPosition();
     }
     public void pivotToAngle(double angle){
         targetAngle = angle;

@@ -54,7 +54,7 @@ public final class Constants
     public final static int SHOOTER_PIVOTTWO_CAN = 17;
     public final static int SHOOTER_PIVOTTHREE_CAN = 12;
 
-    public final static PIDController SHOOTER_CONTROLLER = new PIDController(0.01, 0, 0.01);
+    public final static PIDController SHOOTER_CONTROLLER = new PIDController(0.05, 0, 0);
   }
   public static final class Intake
   {

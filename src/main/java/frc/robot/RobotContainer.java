@@ -69,7 +69,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //configure some button bindings
-    m_controller1.button(5).onTrue(new AutoAim(shooter,45));
+    m_controller1.button(5).onTrue(new AutoAim(shooter,shooter.getPosition() + 0.45));
 
   }
 
