@@ -4,6 +4,7 @@ import java.sql.Driver;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.jni.CANSparkMaxJNI;
 
@@ -22,7 +23,7 @@ public class Shooter extends SubsystemBase {
     private CANSparkMax pivotmotorthree;
     
     public double currentAngle;
-    private double amountMove;
+   // private double amountMove;
     private double targetAngle;
     SwerveSubsystem swerve;
     PIDController pivotController;
@@ -37,12 +38,17 @@ public class Shooter extends SubsystemBase {
         pivotmotortwo.follow(pivotmotorone);
         pivotmotorthree.follow(pivotmotorone);
         pivotController = Constants.Shooter.SHOOTER_CONTROLLER;
+        pivotmotorone.getPIDController().setP(0.1);
         swerve = s;
+        currentAngle = pivotmotorone.getEncoder().getPosition();
+        targetAngle = 90;
     }
     @Override
     public void periodic(){
-        currentAngle = pivotmotorone.getEncoder().getPosition();
+        currentAngle = pivotmotorone.getEncoder().getPosition() * pivotmotorone.getEncoder().getPositionConversionFactor();
         pivotmotorone.set(pivotController.calculate(currentAngle, targetAngle));
+        if(currentAngle == targetAngle) pivotmotorone.set(0);
+        if(isFalling()){pivotmotorone.set(Constants.Shooter.FALL_CANCEL_SPEED);}
     }
     public void shoot(double speed){
         shootmotorone.set(speed);
@@ -54,6 +60,10 @@ public class Shooter extends SubsystemBase {
     public void pivotToAngle(double angle){
         targetAngle = angle;
     }
+    public boolean isFalling(){
+        return ((pivotmotorone.getOutputCurrent() == 0));
+    }
+    
     public void autoShoot(){
         pivotToAngle(getSpeakerAngle(swerve));
         shoot(1);

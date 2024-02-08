@@ -53,7 +53,7 @@ public final class Constants
     public final static int SHOOTER_PIVOTONE_CAN = 16;
     public final static int SHOOTER_PIVOTTWO_CAN = 17;
     public final static int SHOOTER_PIVOTTHREE_CAN = 12;
-
+    public final static double FALL_CANCEL_SPEED = 0.1;
     public final static PIDController SHOOTER_CONTROLLER = new PIDController(0.01, 0, 0.01);
   }
   public static final class Intake
