@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
-
+//🤫🧏‍♂️
 public class ShootMaxxer extends SubsystemBase {
     private TalonFX shootmotorone;
     private TalonFX shootmotortwo;

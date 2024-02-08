@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AutoAim;
+//import frc.robot.commands.AutoAim;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwerveCommandField;
@@ -69,7 +69,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //configure some button bindings
-    m_controller1.button(5).onTrue(new AutoAim(shooter,shooter.getPosition() + 0.45));
+   // m_controller1.button(5).onTrue(new Command(shooter,shooter.getPosition() + 0.45));
 
   }
 
