@@ -10,7 +10,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwerveCommandField;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShootMaxxer;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class RobotContainer {
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve"));
   // Control Devices
-  private final Shooter shooter = new Shooter(drivebase);
+  private final ShootMaxxer shooter = new ShootMaxxer(drivebase);
   private final CommandJoystick m_controller1 =
       new CommandJoystick(OperatorConstants.JOYSTICK_1_PORT);
   private final CommandJoystick m_controller2 =

@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Intake extends SubsystemBase{
+public class IntakeMaxxer extends SubsystemBase{
     private MotorController intakemotorOne;
     private MotorController intakemotorTwo;
     private AnalogInput distanceSensor;
-    public Intake(){
+    public IntakeMaxxer(){
         distanceSensor = new AnalogInput(4);
         intakemotorOne = new CANSparkMax(Constants.Intake.INTAKE_CAN_ONE,MotorType.kBrushless );
         intakemotorTwo = new CANSparkMax(Constants.Intake.INTAKE_CAN_TWO, MotorType.kBrushless);

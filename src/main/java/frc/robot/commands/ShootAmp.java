@@ -1,12 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShootMaxxer;
 
 public class ShootAmp extends Command {
     // Called once the command ends or is interrupted.
-    Shooter shooter;
-    public ShootAmp(Shooter s){
+    ShootMaxxer shooter;
+    public ShootAmp(ShootMaxxer s){
         shooter = s;
     }
     @Override

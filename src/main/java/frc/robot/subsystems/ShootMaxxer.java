@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
 
-public class Shooter extends SubsystemBase {
+public class ShootMaxxer extends SubsystemBase {
     private TalonFX shootmotorone;
     private TalonFX shootmotortwo;
     private CANSparkMax pivotmotorone;
@@ -27,7 +27,7 @@ public class Shooter extends SubsystemBase {
     private double targetAngle;
     SwerveSubsystem swerve;
     PIDController pivotController;
-    public Shooter(SwerveSubsystem s){
+    public ShootMaxxer(SwerveSubsystem s){
 
         shootmotorone = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORONE_CAN);
         shootmotortwo = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORTWO_CAN);
