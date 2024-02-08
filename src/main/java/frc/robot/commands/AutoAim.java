@@ -18,17 +18,18 @@ public class AutoAim extends Command {
     }
     @Override
     public void execute(){
-        shooter.pivotToAngle(angle);
+        
     }
     @Override
     public void end(boolean ainterrupted)
     {
+        shooter.pivotToAngle(angle);
     }
 
     // Returns true when the command should end.
   @Override
     public boolean isFinished()
     {
-     return false;
+     return true;
      } 
 }   
