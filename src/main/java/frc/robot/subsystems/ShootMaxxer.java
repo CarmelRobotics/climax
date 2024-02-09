@@ -11,6 +11,7 @@ import com.revrobotics.jni.CANSparkMaxJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
@@ -45,14 +46,29 @@ public class ShootMaxxer extends SubsystemBase {
     }
     @Override
     public void periodic(){
-        currentAngle = pivotmotorone.getEncoder().getPosition() * pivotmotorone.getEncoder().getPositionConversionFactor();
-        System.out.println(currentAngle);
-        System.out.println(targetAngle);
-        pivotmotorone.set(pivotController.calculate(currentAngle, targetAngle));
+        // currentAngle = pivotmotorone.getEncoder().getPosition() * pivotmotorone.getEncoder().getPositionConversionFactor();
+        // System.out.println(currentAngle);
+        // System.out.println(targetAngle);
+        // pivotmotorone.set(pivotController.calculate(currentAngle, targetAngle));
 
-        if(currentAngle == targetAngle) pivotmotorone.set(0);
-        if(isFalling()){pivotmotorone.set(Constants.Shooter.FALL_CANCEL_SPEED);}
+        // if(currentAngle == targetAngle) pivotmotorone.set(0);
+        // if(isFalling()){pivotmotorone.set(Constants.Shooter.FALL_CANCEL_SPEED);}
+        RelativeEncoder builtin = pivotmotorone.getEncoder();
+        double pos = builtin.getPosition();
+        double targetpos = (targetAngle/360.0);
+        if (Math.abs(pos-targetpos) > 0.04) {
+            if (pos < targetpos) {
+                pivotmotorone.set(0.02);
+            }else {
+                pivotmotorone.set(-0.02);
+            } 
+        }else {
+            pivotmotorone.set(0);
+        }
+        SmartDashboard.putNumber("Wrist Encoder Value", pos);
+        SmartDashboard.putNumber("Wrist Target Value", (targetAngle/360.0));
     }
+    
     public void shoot(double speed){
         shootmotorone.set(speed);
         shootmotortwo.set(-speed);
