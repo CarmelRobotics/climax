@@ -56,7 +56,7 @@ public class ShootMaxxer extends SubsystemBase {
         RelativeEncoder builtin = pivotmotorone.getEncoder();
         double pos = builtin.getPosition();
         double targetpos = (targetAngle/360.0);
-        if (Math.abs(pos-targetpos) > 0.04) {
+        if (Math.abs(pos-targetpos) > 0.1) {
             if (pos < targetpos) {
                 pivotmotorone.set(0.02);
             }else {
@@ -80,7 +80,7 @@ public class ShootMaxxer extends SubsystemBase {
         return pivotmotorone.getEncoder().getPosition();
     }
     public void pivotToAngle(double angle){
-        targetAngle = angle;
+        targetAngle += angle;
     }
     public boolean isFalling(){
         return ((pivotmotorone.getOutputCurrent() == 0));

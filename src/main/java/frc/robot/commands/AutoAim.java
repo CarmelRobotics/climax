@@ -14,7 +14,7 @@ public class AutoAim extends Command {
     }
     @Override
     public void initialize(){
-        
+        shooter.pivotToAngle(angle);
     }
     @Override
     public void execute(){
@@ -23,7 +23,7 @@ public class AutoAim extends Command {
     @Override
     public void end(boolean ainterrupted)
     {
-        shooter.pivotToAngle(angle);
+        
     }
 
     // Returns true when the command should end.
