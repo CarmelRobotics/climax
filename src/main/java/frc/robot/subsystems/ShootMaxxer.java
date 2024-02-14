@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.jni.CANSparkMaxJNI;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,8 +29,12 @@ public class ShootMaxxer extends SubsystemBase {
     private double targetAngle;
     SwerveSubsystem swerve;
     PIDController pivotController;
+    DigitalInput limitswitch;
+    public double secondsPerDegree;
     public ShootMaxxer(SwerveSubsystem s){
-
+        secondsPerDegree = 0.01;
+        double currentDegree = 90;
+        limitswitch = new DigitalInput(0);
         shootmotorone = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORONE_CAN);
         shootmotortwo = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORTWO_CAN);
         //pivotmotor = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_PIVOT_CAN);
@@ -42,31 +47,13 @@ public class ShootMaxxer extends SubsystemBase {
         pivotmotorone.getPIDController().setP(0.1);
         swerve = s;
         currentAngle = pivotmotorone.getEncoder().getPosition();
-        targetAngle = 90;
+        targetAngle = 38;
     }
     @Override
     public void periodic(){
-        // currentAngle = pivotmotorone.getEncoder().getPosition() * pivotmotorone.getEncoder().getPositionConversionFactor();
-        // System.out.println(currentAngle);
-        // System.out.println(targetAngle);
-        // pivotmotorone.set(pivotController.calculate(currentAngle, targetAngle));
-
-        // if(currentAngle == targetAngle) pivotmotorone.set(0);
-        // if(isFalling()){pivotmotorone.set(Constants.Shooter.FALL_CANCEL_SPEED);}
-        RelativeEncoder builtin = pivotmotorone.getEncoder();
-        double pos = builtin.getPosition();
-        double targetpos = (targetAngle/360.0);
-        if (Math.abs(pos-targetpos) > 0.04) {
-            if (pos < targetpos) {
-                pivotmotorone.set(0.02);
-            }else {
-                pivotmotorone.set(-0.02);
-            } 
-        }else {
-            pivotmotorone.set(0);
-        }
-        SmartDashboard.putNumber("Wrist Encoder Value", pos);
-        SmartDashboard.putNumber("Wrist Target Value", (targetAngle/360.0));
+       if(limitswitch.get()){
+        pivot(0);
+       }
     }
     
     public void shoot(double speed){
@@ -79,11 +66,20 @@ public class ShootMaxxer extends SubsystemBase {
     public double getPosition(){
         return pivotmotorone.getEncoder().getPosition();
     }
+    public double getDegree(){
+        return currentAngle;
+    }
+    public void setAngle(double degree){
+        currentAngle = degree;
+    }
     public void pivotToAngle(double angle){
-        targetAngle = angle;
+        targetAngle += angle;
     }
     public boolean isFalling(){
         return ((pivotmotorone.getOutputCurrent() == 0));
+    }
+    public void splinePivot(){
+
     }
     
     public void autoShoot(){

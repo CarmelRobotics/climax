@@ -59,7 +59,7 @@ public final class Constants
   public static final class Intake
   {
     public static final int DISTSENSOR_ANALOG_ID = 4;
-    public static final int INTAKE_CAN_ONE = 18;
+    public static final int INTAKE_CAN_ONE = 8;
     public static final int INTAKE_CAN_TWO = 19;
     public static final I2C.Port i2cPort = I2C.Port.kOnboard;
   }

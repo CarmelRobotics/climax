@@ -8,8 +8,10 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.RunIntake;
 import frc.robot.commands.SwerveCommandField;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeMaxxer;
 import frc.robot.subsystems.ShootMaxxer;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -38,7 +40,9 @@ public class RobotContainer {
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve"));
   // Control Devices
+  
   private final ShootMaxxer shooter = new ShootMaxxer(drivebase);
+  private final IntakeMaxxer intakemaxxxer = new IntakeMaxxer();
   private final CommandJoystick m_controller1 =
       new CommandJoystick(OperatorConstants.JOYSTICK_1_PORT);
   private final CommandJoystick m_controller2 =
@@ -69,8 +73,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //configure some button bindings
-    m_controller1.button(5).onTrue(new AutoAim(shooter,shooter.getPosition() + 0.45));
-
+    m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
+    m_controller1.button(2).whileTrue(new RunIntake(intakemaxxxer));
   }
 
   /**

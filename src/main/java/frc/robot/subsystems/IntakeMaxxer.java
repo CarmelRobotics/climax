@@ -12,16 +12,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //
 public class IntakeMaxxer extends SubsystemBase{
     private MotorController intakemotorOne;
-    private MotorController intakemotorTwo;
+    //private MotorController intakemotorTwo;
     private AnalogInput distanceSensor;
     public IntakeMaxxer(){
         distanceSensor = new AnalogInput(4);
         intakemotorOne = new CANSparkMax(Constants.Intake.INTAKE_CAN_ONE,MotorType.kBrushless );
-        intakemotorTwo = new CANSparkMax(Constants.Intake.INTAKE_CAN_TWO, MotorType.kBrushless);
+        //intakemotorTwo = new CANSparkMax(Constants.Intake.INTAKE_CAN_TWO, MotorType.kBrushless);
     }
     public void runIntake(double speed){
         intakemotorOne.set(speed);
-        intakemotorTwo.set(-speed);
+        //intakemotorTwo.set(-speed);
     }
     public double getDist(){
         return AnalogInput.getGlobalSampleRate();
