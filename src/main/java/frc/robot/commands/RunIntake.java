@@ -17,11 +17,13 @@ public class RunIntake extends Command {
     }
     @Override
     public void execute(){
-        intake.runIntake(1);
+        intake.runIntake(-1);
+        //0.4 optimal speed
     }
     @Override
     public void end(boolean interrupted)
     {
+        intake.runIntake(0);
     }
 
     // Returns true when the command should end.
