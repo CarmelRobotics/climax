@@ -84,4 +84,11 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.01;
     public static final double TURN_CONSTANT = 0.75;
   }
+
+  public enum LED_Controls {
+    AUTO,
+    DEFAULT,
+    SHOOTING,
+    BOOTING
+  }
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.LED_Controls;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -62,6 +63,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    // Set LED Stuff
+    m_robotContainer.ledcontroler.setState(LED_Controls.AUTO);
   }
 
   /** This function is called periodically during autonomous. */
@@ -77,6 +81,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // Set LED Stuff
+    m_robotContainer.ledcontroler.setState(LED_Controls.DEFAULT);
   }
 
   /** This function is called periodically during operator control. */

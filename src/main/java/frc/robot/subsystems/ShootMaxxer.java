@@ -16,7 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
-//🤫🧏‍♂️
+import frc.robot.Constants.LED_Controls;
+
 public class ShootMaxxer extends SubsystemBase {
     private TalonFX shootmotorone;
     private TalonFX shootmotortwo;
@@ -31,7 +32,9 @@ public class ShootMaxxer extends SubsystemBase {
     PIDController pivotController;
     DigitalInput limitswitch;
     public double secondsPerDegree;
-    public ShootMaxxer(SwerveSubsystem s){
+
+    private LED ledcontroler;
+    public ShootMaxxer(SwerveSubsystem s, LED l){
         secondsPerDegree = 0.01;
         double currentDegree = 90;
         limitswitch = new DigitalInput(0);
@@ -48,6 +51,8 @@ public class ShootMaxxer extends SubsystemBase {
         swerve = s;
         currentAngle = pivotmotorone.getEncoder().getPosition();
         targetAngle = 38;
+
+        ledcontroler = l;
     }
     @Override
     public void periodic(){
@@ -59,6 +64,13 @@ public class ShootMaxxer extends SubsystemBase {
     public void shoot(double speed){
         shootmotorone.set(speed);
         shootmotortwo.set(-speed);
+
+        // Set LED Stuff
+        if (speed == 0) {
+            ledcontroler.setState(LED_Controls.DEFAULT);
+        } else {
+            ledcontroler.setState(LED_Controls.SHOOTING);
+        }
     }
     public void pivot(double speed){
         pivotmotorone.set(speed);

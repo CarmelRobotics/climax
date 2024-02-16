@@ -14,6 +14,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeMaxxer;
 import frc.robot.subsystems.ShootMaxxer;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.LED;
 
 import java.io.File;
 
@@ -41,7 +42,8 @@ public class RobotContainer {
                                                                          "swerve"));
   // Control Devices
   
-  private final ShootMaxxer shooter = new ShootMaxxer(drivebase);
+  public final LED ledcontroler = new LED();
+  private final ShootMaxxer shooter = new ShootMaxxer(drivebase, ledcontroler);
   private final IntakeMaxxer intakemaxxxer = new IntakeMaxxer();
   private final CommandJoystick m_controller1 =
       new CommandJoystick(OperatorConstants.JOYSTICK_1_PORT);
