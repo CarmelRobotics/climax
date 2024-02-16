@@ -4,7 +4,6 @@ import edu.wpi.first.math.proto.Spline;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Shooter;
-import frc.robot.subsystems.BTS;
 import frc.robot.subsystems.ShootMaxxer;
 
 public class SplinePivot extends Command {
@@ -13,11 +12,13 @@ public class SplinePivot extends Command {
     Timer timey;
     double amountMove;
     double timeMove;
+    double endAngle;
     public SplinePivot(ShootMaxxer s, double targetAngle){
         shooter = s;
         timey = new Timer();
         amountMove = targetAngle - shooter.getDegree();
         timeMove = Math.abs(amountMove * shooter.secondsPerDegree);
+        endAngle = targetAngle;
     }
     @Override
     public void initialize(){
@@ -33,6 +34,7 @@ public class SplinePivot extends Command {
         shooter.pivot(0);
         timey.stop();
         timey.reset();
+        shooter.setAngle(endAngle);
     }
 
     // Returns true when the command should end.
