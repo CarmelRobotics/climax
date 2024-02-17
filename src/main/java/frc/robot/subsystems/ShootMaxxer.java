@@ -3,11 +3,12 @@ package frc.robot.subsystems;
 import java.sql.Driver;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.jni.CANSparkMaxJNI;
-
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -23,7 +24,7 @@ public class ShootMaxxer extends SubsystemBase {
     private CANSparkMax pivotmotorone;
     private CANSparkMax pivotmotortwo;
     private CANSparkMax pivotmotorthree;
-    
+    private AHRS navx = new AHRS(I2C.Port.kOnboard);
     public double currentAngle;
    // private double amountMove;
     private double targetAngle;
@@ -55,7 +56,9 @@ public class ShootMaxxer extends SubsystemBase {
         pivot(0);
        }
     }
-    
+    public double getNavxPitch(){
+        return navx.getPitch();
+    }
     public void shoot(double speed){
         shootmotorone.set(speed);
         shootmotortwo.set(-speed);
