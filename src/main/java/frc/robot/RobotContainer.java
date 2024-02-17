@@ -74,7 +74,7 @@ public class RobotContainer {
   private void configureBindings() {
     //configure some button bindings
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
-    m_controller1.button(2).whileTrue(new RunIntake(intakemaxxxer));
+    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer));
   }
 
   /**
