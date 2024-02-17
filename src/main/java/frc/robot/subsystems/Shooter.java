@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.sql.Driver;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MusicTone;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -49,6 +50,7 @@ public class Shooter extends SubsystemBase {
         bts = new BTS();
         shootmotorone = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORONE_CAN);
         shootmotortwo = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORTWO_CAN);
+        
         pivotmotorone = new CANSparkMax(frc.robot.Constants.Shooter.SHOOTER_PIVOTONE_CAN, MotorType.kBrushless);
         pivotmotorone.setSmartCurrentLimit(frc.robot.Constants.Shooter.PIVOT_CURRENT_LIMIT);
         pivotController = Constants.Shooter.SHOOTER_PID_CONTROLLER;
@@ -69,14 +71,19 @@ public class Shooter extends SubsystemBase {
             break;
         case TRANSFER:
             transfer();
+            break;
         case STOW:
             stow();
+            break;
         case ERROR:
             error();
+            break;
         case AMPSHOOT:
             AutoShootAmp();
+            break;
         case SPEAKERAIM:
             pivotToAngle(getSpeakerAngle(swerve));
+            break;
         default:
             break;
        }
@@ -128,8 +135,9 @@ public class Shooter extends SubsystemBase {
       //  return navx.getPitch();
     //}
     public void shoot(double speed){
-        shootmotorone.set(speed);
-        shootmotortwo.set(-speed);
+        
+        shootmotorone.setControl(new DutyCycleOut(1,false,false,false,false));
+        shootmotortwo.setControl(new DutyCycleOut(-1,false,false,false,false));
     }
     public void pivot(double speed){
         pivotmotorone.set(speed);
@@ -140,11 +148,16 @@ public class Shooter extends SubsystemBase {
     public double getDegree(){
         return currentAngle;
     }
-    public void setAngle(double degree){
-        currentAngle = degree;
+    public double getPivotVelocity(){
+        return (encoder.getVelocity().getValue()) * (2*Math.PI);
     }
+    // public void setAngle(double degree){
+    //     currentAngle = degree;
+        
+    // }
     public void pivotToAngle(double angle){
         pivotGoal = Rotation2d.fromDegrees(angle);
+        pivotController.reset(getPivotAngle().getRadians(),getPivotVelocity());
     }
     public boolean isFalling(){
         return ((pivotmotorone.getOutputCurrent() == 0));
