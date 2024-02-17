@@ -50,14 +50,16 @@ public class Shooter extends SubsystemBase {
         shootmotorone = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORONE_CAN);
         shootmotortwo = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORTWO_CAN);
         pivotmotorone = new CANSparkMax(frc.robot.Constants.Shooter.SHOOTER_PIVOTONE_CAN, MotorType.kBrushless);
-        pivotmotorone.setSmartCurrentLimit(10);
+        pivotmotorone.setSmartCurrentLimit(frc.robot.Constants.Shooter.PIVOT_CURRENT_LIMIT);
         pivotController = Constants.Shooter.SHOOTER_PID_CONTROLLER;
         ffController = Constants.Shooter.SHOOTER_FF_CONTROLLER;
         swerve = s;
     }
     @Override
     public void periodic(){
-        calcAndApplyControllers();
+       SmartDashboard.putNumber("Pivot angle", getPivotAngle().getDegrees());
+       SmartDashboard.putString("Current State",state.toString());
+       calcAndApplyControllers();
        if(limitswitch.get()){
         pivot(0);
        }
@@ -98,6 +100,7 @@ public class Shooter extends SubsystemBase {
         ffOutput = ffController.calculate(profSetpoint.position, profSetpoint.velocity);
         pivotmotorone.setVoltage(pidOutput + ffOutput);
     }
+    //used for going under stage
     public void stow(){
         pivotToAngle(15);
         shoot(0);
@@ -105,12 +108,15 @@ public class Shooter extends SubsystemBase {
     public void SpeakerShoot(){
         autoShoot();
     }
+    //intake -> shooter
     public void transfer(){
         shoot(1);
         bts.set(1);
     }
+    //if something goofy happens
     public void error(){
         //do the LED error signal when LED code ready
+        pivot(0);
         shoot(1);
     }  
 
