@@ -11,8 +11,8 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SwerveCommandField;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeMaxxer;
-import frc.robot.subsystems.ShootMaxxer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.File;
@@ -41,8 +41,8 @@ public class RobotContainer {
                                                                          "swerve"));
   // Control Devices
   
-  private final ShootMaxxer shooter = new ShootMaxxer(drivebase);
-  private final IntakeMaxxer intakemaxxxer = new IntakeMaxxer();
+  private final Shooter shooter = new Shooter(drivebase);
+  private final Intake intakemaxxxer = new Intake();
   private final CommandJoystick m_controller1 =
       new CommandJoystick(OperatorConstants.JOYSTICK_1_PORT);
   private final CommandJoystick m_controller2 =
