@@ -23,7 +23,7 @@ public class AutoAim extends Command {
     @Override
     public void end(boolean ainterrupted)
     {
-        
+        shooter.pivot(0);   
     }
 
     // Returns true when the command should end.
