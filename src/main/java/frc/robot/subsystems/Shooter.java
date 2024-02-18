@@ -39,8 +39,8 @@ public class Shooter extends SubsystemBase {
     private DigitalInput limitswitch;
     private CANcoder encoder;
     private BTS bts;
-    private Rotation2d pivotGoal;
-    private ShooterState state;
+    private Rotation2d pivotGoal = Rotation2d.fromDegrees(45);
+    private ShooterState state = ShooterState.STOW;
     public double secondsPerDegree;
     private double pidOutput;
     private double ffOutput;
@@ -176,9 +176,9 @@ public class Shooter extends SubsystemBase {
     }
     public double getSpeakerAngle(SwerveSubsystem drive){
         if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
-        return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / drive.getPosition().getX() - Constants.FieldConstants.SPEAKER_X_BLUE);
+        return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / drive.getPose().getX() - Constants.FieldConstants.SPEAKER_X_BLUE);
         } else {
-            return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / drive.getPosition().getX() - Constants.FieldConstants.SPEAKER_X_RED);
+            return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / drive.getPose().getX() - Constants.FieldConstants.SPEAKER_X_RED);
         }
     }
 }

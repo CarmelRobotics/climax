@@ -8,8 +8,10 @@ import frc.robot.subsystems.Shooter;
 public class RunIntake extends Command {
     // Called once the command ends or is interrupted.
     Intake intake;
-    public RunIntake(Intake intake){
+    double speed;
+    public RunIntake(Intake intake, double s){
         this.intake = intake;
+        speed = s;
     }
     @Override
     public void initialize(){
@@ -17,7 +19,7 @@ public class RunIntake extends Command {
     }
     @Override
     public void execute(){
-        intake.runIntake(-1);
+        intake.runIntake(speed);
         //0.4 optimal speed
     }
     @Override

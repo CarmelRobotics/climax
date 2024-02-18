@@ -74,7 +74,9 @@ public class RobotContainer {
   private void configureBindings() {
     //configure some button bindings
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
-    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer));
+    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-1));
+    m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 1));
+3    
   }
 
   /**
@@ -84,6 +86,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("test", false);
+    return drivebase.getAutonomousCommand("test");
   }
 }
+

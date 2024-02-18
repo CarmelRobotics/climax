@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -39,6 +41,12 @@ public final class Constants
 
     public static final double MAX_SPEED        = 1;
     public static final double MAX_ACCELERATION = 1;
+  }
+  public static final class AutonConstants
+  {
+
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+    public static final PIDConstants ANGLE_PID   = new PIDConstants(0.4, 0, 0.01);
   }
 
   public static final class Drivebase
@@ -97,9 +105,9 @@ public final class Constants
     public static final int JOYSTICK_2_PORT = 1;
     public static final int GUITAR_PORT = 2;
     // Joystick Deadband
-    public static final double LEFT_X_DEADBAND = 0.01;
-    public static final double LEFT_Y_DEADBAND = 0.01;
-    public static final double RIGHT_X_DEADBAND = 0.01;
-    public static final double TURN_CONSTANT = 0.75;
+    public static final double LEFT_X_DEADBAND = 0.001;
+    public static final double LEFT_Y_DEADBAND = 0.001;
+    public static final double RIGHT_X_DEADBAND = 0.001;
+    public static final double TURN_CONSTANT = 0.075;
   }
 }
