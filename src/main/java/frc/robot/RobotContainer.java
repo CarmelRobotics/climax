@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DriveZero;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SwerveCommandField;
@@ -17,11 +18,16 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.File;
 
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -76,7 +82,6 @@ public class RobotContainer {
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
     m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-1));
     m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 1));
-3    
   }
 
   /**
@@ -86,7 +91,14 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("test");
+    //return drivebase.getAutonomousCommand("test");
+    double x = drivebase.getPose().getX() + 1;
+    double y = drivebase.getPose().getY();
+    Rotation2d rotate = drivebase.getHeading();
+    //return new SequentialCommandGroup(drivebase.driveToPose(new Pose2d(x,y,rotate)), new DriveZero(drivebase));
+    PathPlannerPath path = PathPlannerPath.fromPathFile("test");
+    drivebase.resetOdometry(path.getPreviewStartingHolonomicPose());
+    return new SequentialCommandGroup(drivebase.postPathplannerPath("test"), new DriveZero(drivebase));
   }
 }
 
