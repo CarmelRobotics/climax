@@ -11,6 +11,7 @@ import frc.robot.commands.DriveZero;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SwerveCommandField;
+import frc.robot.commands.ZeroGyro;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -82,6 +83,7 @@ public class RobotContainer {
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
     m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-1));
     m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 1));
+    m_controller1.button(11).onTrue(new ZeroGyro(drivebase));
   }
 
   /**
