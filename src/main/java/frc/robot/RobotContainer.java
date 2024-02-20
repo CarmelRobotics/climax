@@ -12,6 +12,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SwerveCommandField;
 import frc.robot.commands.ZeroGyro;
+import frc.robot.commands.runIntakeforTime;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -99,8 +100,10 @@ public class RobotContainer {
     Rotation2d rotate = drivebase.getHeading();
     //return new SequentialCommandGroup(drivebase.driveToPose(new Pose2d(x,y,rotate)), new DriveZero(drivebase));
     PathPlannerPath path = PathPlannerPath.fromPathFile("test");
+    
     drivebase.resetOdometry(path.getPreviewStartingHolonomicPose());
-    return new SequentialCommandGroup(drivebase.postPathplannerPath("test"), new DriveZero(drivebase));
+    
+    return new SequentialCommandGroup(new ZeroGyro(drivebase),drivebase.postPathplannerPath("test"), new DriveZero(drivebase),new runIntakeforTime(intakemaxxxer, -1, 0.5));
   }
 }
 

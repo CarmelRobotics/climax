@@ -37,16 +37,16 @@ public final class Constants
 
     public static final PIDFConfig xAutoPID     = new PIDFConfig(0.7, 0, 0);
     public static final PIDFConfig yAutoPID     = new PIDFConfig(0.7, 0, 0);
-    public static final PIDFConfig angleAutoPID = new PIDFConfig(0.4, 0, 0.01);
+    public static final PIDFConfig angleAutoPID = new PIDFConfig(0.1, 0, 0.01);
 
-    public static final double MAX_SPEED        = 1;
+    public static final double MAX_SPEED        = 0.5;
     public static final double MAX_ACCELERATION = 1;
   }
   public static final class AutonConstants
   {
 
     public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
-    public static final PIDConstants ANGLE_PID   = new PIDConstants(0.4, 0, 0.01);
+    public static final PIDConstants ANGLE_PID   = new PIDConstants(0.22, 0, 0.0);
   }
 
   public static final class Drivebase
