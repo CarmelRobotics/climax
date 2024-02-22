@@ -9,6 +9,7 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveZero;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.LED_VIBE;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SwerveCommandField;
 import frc.robot.commands.ZeroGyro;
@@ -16,6 +17,7 @@ import frc.robot.commands.runIntakeforTime;
 import frc.robot.commands.setHeadingCorrection;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.ShooterState;
@@ -51,7 +53,8 @@ public class RobotContainer {
                                                                          "swerve"));
   // Control Devices
   
-  private final Shooter shooter = new Shooter(drivebase);
+  public  final LED ledManager = new LED();
+  private final Shooter shooter = new Shooter(drivebase, ledManager);
   private final Intake intakemaxxxer = new Intake();
   private final CommandJoystick m_controller1 =
       new CommandJoystick(OperatorConstants.JOYSTICK_1_PORT);
@@ -92,6 +95,7 @@ public class RobotContainer {
     m_controller1.button(4).onTrue(shooter.setShooterMode(ShooterState.AMPAIM));
     m_controller1.button(5).onTrue(shooter.setShooterMode(ShooterState.STOW));
     
+    m_controller1.button(9).toggleOnTrue(new LED_VIBE(ledManager));
   }
 
 

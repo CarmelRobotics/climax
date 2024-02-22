@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RockinTalon;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.subsystems.LED.STATUS;
 
 public class Shooter extends SubsystemBase {
     private RockinTalon shootmotorone;
@@ -36,6 +37,7 @@ public class Shooter extends SubsystemBase {
    // private double amountMove;
     private double targetAngle;
     private SwerveSubsystem swerve;
+    private LED l;
     private ProfiledPIDController pivotController;
     private ArmFeedforward ffController;
     private DigitalInput limitswitch;
@@ -47,7 +49,7 @@ public class Shooter extends SubsystemBase {
     public double secondsPerDegree;
     private double pidOutput;
     private double ffOutput;
-    public Shooter(SwerveSubsystem s){
+    public Shooter(SwerveSubsystem s, LED ledSystem){
         limitswitch = new DigitalInput(0);
         encoder = new CANcoder(21);
         bts = new BTS();
@@ -59,6 +61,7 @@ public class Shooter extends SubsystemBase {
         pivotController = Constants.Shooter.SHOOTER_PID_CONTROLLER;
         ffController = Constants.Shooter.SHOOTER_FF_CONTROLLER;
         swerve = s;
+        l = ledSystem;
     }
     @Override
     public void periodic(){
@@ -145,7 +148,11 @@ public class Shooter extends SubsystemBase {
       //  return navx.getPitch();
     //}
     public void shoot(double speed){
-        
+        if (speed != 0) {
+            l.setMode(STATUS.SHOOTING);
+        } else {
+            l.setMode(STATUS.DEFAULT);
+        }
         shootmotorone.set(speed);
         shootmotortwo.set(-speed);
     }
