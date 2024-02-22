@@ -159,8 +159,8 @@ public class SwerveSubsystem extends SubsystemBase
   {
 // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
-        swerveDrive.getMaximumVelocity(), 4.0,
-        swerveDrive.getMaximumAngularVelocity(), Units.degreesToRadians(720));
+        2, 3,
+        swerveDrive.getMaximumAngularVelocity(), Units.degreesToRadians(200));
 
 // Since AutoBuilder is configured, we can use it to build pathfinding commands
     return AutoBuilder.pathfindToPose(
@@ -169,6 +169,9 @@ public class SwerveSubsystem extends SubsystemBase
         0.0, // Goal end velocity in meters/sec
         0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
                                      );
+  }
+  public Command straighten(){
+    return driveToPose(new Pose2d(getPose().getX(),getPose().getY(),Rotation2d.fromDegrees(0)));
   }
 
   /**
@@ -310,8 +313,8 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
+    //zeroGyro();
   }
-
   @Override
   public void simulationPeriodic()
   {
@@ -504,5 +507,8 @@ public class SwerveSubsystem extends SubsystemBase
   public void addFakeVisionReading()
   {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+  }
+  public void setHeadingCorrection(boolean state){
+    swerveDrive.setHeadingCorrection(state);
   }
 }

@@ -13,6 +13,7 @@ import frc.robot.commands.RunIntake;
 import frc.robot.commands.SwerveCommandField;
 import frc.robot.commands.ZeroGyro;
 import frc.robot.commands.runIntakeforTime;
+import frc.robot.commands.setHeadingCorrection;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -87,6 +88,7 @@ public class RobotContainer {
     m_controller1.button(11).onTrue(new ZeroGyro(drivebase));
   }
 
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -95,15 +97,28 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return drivebase.getAutonomousCommand("test");
-    double x = drivebase.getPose().getX() + 1;
+    double x = drivebase.getPose().getX();
     double y = drivebase.getPose().getY();
     Rotation2d rotate = drivebase.getHeading();
+    Pose2d zero = new Pose2d(drivebase.getPose().getX(),drivebase.getPose().getY(),Rotation2d.fromDegrees(0));
     //return new SequentialCommandGroup(drivebase.driveToPose(new Pose2d(x,y,rotate)), new DriveZero(drivebase));
     PathPlannerPath path = PathPlannerPath.fromPathFile("test");
     
     drivebase.resetOdometry(path.getPreviewStartingHolonomicPose());
-    
-    return new SequentialCommandGroup(new ZeroGyro(drivebase),drivebase.postPathplannerPath("test"), new DriveZero(drivebase),new runIntakeforTime(intakemaxxxer, -1, 0.5));
-  }
+    //drivebase.driveToPose(new Pose2d(drivebase.getPose().getX(),drivebase.getPose().getY(),Rotation2d.fromDegrees(0)));
+    return new SequentialCommandGroup(
+     new setHeadingCorrection(drivebase, true),
+     new ZeroGyro(drivebase),
+     drivebase.postPathplannerPath("test"),
+     new DriveZero(drivebase),
+     drivebase.postPathplannerPath("test2"),
+     new DriveZero(drivebase),
+     drivebase.postPathplannerPath("test3"),
+     new DriveZero(drivebase),
+     drivebase.postPathplannerPath("test4"),
+     new DriveZero(drivebase),
+     new setHeadingCorrection(drivebase, false)
+    );
+}
 }
 
