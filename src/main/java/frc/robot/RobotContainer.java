@@ -18,6 +18,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Shooter.ShooterState;
 
 import java.io.File;
 
@@ -85,7 +86,12 @@ public class RobotContainer {
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
     m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-1));
     m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 1));
+    m_controller2.button(2).toggleOnTrue(shooter.shootNote());
     m_controller1.button(11).onTrue(new ZeroGyro(drivebase));
+    m_controller1.button(3).onTrue(shooter.setShooterMode(ShooterState.SPEAKERAIM));
+    m_controller1.button(4).onTrue(shooter.setShooterMode(ShooterState.AMPAIM));
+    m_controller1.button(5).onTrue(shooter.setShooterMode(ShooterState.STOW));
+    
   }
 
 

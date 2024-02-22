@@ -21,13 +21,15 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RockinTalon;
 import frc.robot.Constants.FieldConstants;
 
 public class Shooter extends SubsystemBase {
-    private TalonFX shootmotorone;
-    private TalonFX shootmotortwo;
+    private RockinTalon shootmotorone;
+    private RockinTalon shootmotortwo;
     private CANSparkMax pivotmotorone;
     //private AHRS navx = new AHRS(I2C.Port.kOnboard);
     public double currentAngle;
@@ -38,6 +40,7 @@ public class Shooter extends SubsystemBase {
     private ArmFeedforward ffController;
     private DigitalInput limitswitch;
     private CANcoder encoder;
+    private Vision limelight;
     private BTS bts;
     private Rotation2d pivotGoal = Rotation2d.fromDegrees(45);
     private ShooterState state = ShooterState.STOW;
@@ -48,9 +51,9 @@ public class Shooter extends SubsystemBase {
         limitswitch = new DigitalInput(0);
         encoder = new CANcoder(21);
         bts = new BTS();
-        shootmotorone = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORONE_CAN);
-        shootmotortwo = new TalonFX(frc.robot.Constants.Shooter.SHOOTER_MOTORTWO_CAN);
-        
+        shootmotorone = new RockinTalon(frc.robot.Constants.Shooter.SHOOTER_MOTORONE_CAN);
+        shootmotortwo = new RockinTalon(frc.robot.Constants.Shooter.SHOOTER_MOTORTWO_CAN);
+        limelight = new Vision();
         pivotmotorone = new CANSparkMax(frc.robot.Constants.Shooter.SHOOTER_PIVOTONE_CAN, MotorType.kBrushless);
         pivotmotorone.setSmartCurrentLimit(frc.robot.Constants.Shooter.PIVOT_CURRENT_LIMIT);
         pivotController = Constants.Shooter.SHOOTER_PID_CONTROLLER;
@@ -60,6 +63,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic(){
        SmartDashboard.putNumber("Pivot angle", getPivotAngle().getDegrees());
+       SmartDashboard.putNumber("Goal angle", pivotGoal.getDegrees());
        SmartDashboard.putString("Current State",state.toString());
        calcAndApplyControllers();
        if(limitswitch.get()){
@@ -78,7 +82,7 @@ public class Shooter extends SubsystemBase {
         case ERROR:
             error();
             break;
-        case AMPSHOOT:
+        case AMPAIM:
             AutoShootAmp();
             break;
         case SPEAKERAIM:
@@ -95,11 +99,17 @@ public class Shooter extends SubsystemBase {
         TRANSFER,
         STOW,
         ERROR,
-        AMPSHOOT,
+        AMPAIM,
         SPEAKERAIM
     }
     public void setMode(ShooterState state){
         this.state = state;
+    }
+    public Command setShooterMode(ShooterState state){
+        return run(() -> setMode(state));
+    }
+    public Command shootNote(){
+        return run(() -> shoot(1));
     }
     public void calcAndApplyControllers(){
         pidOutput = pivotController.calculate(getPivotAngle().getRadians(), pivotGoal.getRadians());
@@ -136,8 +146,8 @@ public class Shooter extends SubsystemBase {
     //}
     public void shoot(double speed){
         
-        shootmotorone.setControl(new DutyCycleOut(1,false,false,false,false));
-        shootmotortwo.setControl(new DutyCycleOut(-1,false,false,false,false));
+        shootmotorone.set(speed);
+        shootmotortwo.set(-speed);
     }
     public void pivot(double speed){
         pivotmotorone.set(speed);
@@ -176,9 +186,9 @@ public class Shooter extends SubsystemBase {
     }
     public double getSpeakerAngle(SwerveSubsystem drive){
         if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
-        return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / drive.getPose().getX() - Constants.FieldConstants.SPEAKER_X_BLUE);
+        return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / limelight.getPoseX() - Constants.FieldConstants.SPEAKER_X_BLUE);
         } else {
-            return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / drive.getPose().getX() - Constants.FieldConstants.SPEAKER_X_RED);
+            return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / limelight.getPoseX() - Constants.FieldConstants.SPEAKER_X_RED);
         }
     }
 }
