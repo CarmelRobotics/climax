@@ -11,6 +11,7 @@ import frc.robot.commands.DriveZero;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.LED_VIBE;
 import frc.robot.commands.RunIntake;
+import frc.robot.commands.ShootNote;
 import frc.robot.commands.SwerveCommandField;
 import frc.robot.commands.ZeroGyro;
 import frc.robot.commands.runIntakeforTime;
@@ -87,9 +88,9 @@ public class RobotContainer {
   private void configureBindings() {
     //configure some button bindings
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
-    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-1));
-    m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 1));
-    m_controller2.button(2).toggleOnTrue(shooter.shootNote());
+    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-0.7));
+    m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 0.7));
+    m_controller2.button(2).toggleOnTrue(new ShootNote(shooter));
     m_controller1.button(11).onTrue(new ZeroGyro(drivebase));
     m_controller1.button(3).onTrue(shooter.setShooterMode(ShooterState.SPEAKERAIM));
     m_controller1.button(4).onTrue(shooter.setShooterMode(ShooterState.AMPAIM));

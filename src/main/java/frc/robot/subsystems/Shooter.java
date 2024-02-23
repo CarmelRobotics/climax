@@ -70,7 +70,7 @@ public class Shooter extends SubsystemBase {
        SmartDashboard.putString("Current State",state.toString());
        calcAndApplyControllers();
        if(limitswitch.get()){
-        pivot(0);
+        setMode(ShooterState.ERROR);
        }
        switch (state) {
         case SPEAKERSHOOT:
@@ -86,7 +86,7 @@ public class Shooter extends SubsystemBase {
             error();
             break;
         case AMPAIM:
-            AutoShootAmp();
+            pivotToAngle(Constants.FieldConstants.AMP_ANGLE);
             break;
         case SPEAKERAIM:
             pivotToAngle(getSpeakerAngle(swerve));
@@ -122,22 +122,21 @@ public class Shooter extends SubsystemBase {
     }
     //used for going under stage
     public void stow(){
-        pivotToAngle(15);
-        shoot(0);
+        pivotToAngle(45);
     }
+    //no use this
     public void SpeakerShoot(){
         autoShoot();
     }
     //intake -> shooter
     public void transfer(){
-        shoot(1);
-        bts.set(1);
+        pivotToAngle(45);
     }
     //if something goofy happens
     public void error(){
         //do the LED error signal when LED code ready
         pivot(0);
-        shoot(1);
+        
     }  
 
 

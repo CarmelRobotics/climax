@@ -3,10 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class ShootAmp extends Command {
+public class ShootNote extends Command {
     // Called once the command ends or is interrupted.
     Shooter shooter;
-    public ShootAmp(Shooter s){
+    public ShootNote(Shooter s){
         shooter = s;
     }
     @Override
@@ -15,7 +15,7 @@ public class ShootAmp extends Command {
     }
     @Override
     public void execute(){
-        shooter.AutoShootAmp();
+        shooter.shoot(1);
     }
     @Override
     public void end(boolean interrupted)
