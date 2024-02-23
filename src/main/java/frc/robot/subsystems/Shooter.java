@@ -175,10 +175,19 @@ public class Shooter extends SubsystemBase {
         shoot(1);
     }
     public double getSpeakerAngle(SwerveSubsystem drive){
+        double x;
+        if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+             x = drive.getPose().getX() - Constants.FieldConstants.SPEAKER_X_RED;
+        } else{
+             x = drive.getPose().getX();
+        }
+        
+        double y = 5.5 - drive.getPose().getY();
+        double distFromSpeaker  = Math.sqrt((Math.pow(x,2)) + (Math.pow(y, 2)));
         if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
-        return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / drive.getPose().getX() - Constants.FieldConstants.SPEAKER_X_BLUE);
+        return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / distFromSpeaker);
         } else {
-            return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / drive.getPose().getX() - Constants.FieldConstants.SPEAKER_X_RED);
+            return Math.atan(Constants.FieldConstants.SPEAKER_HEIGHT / distFromSpeaker - Constants.FieldConstants.SPEAKER_X_RED);
         }
     }
 }
