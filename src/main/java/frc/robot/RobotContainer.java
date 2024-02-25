@@ -71,8 +71,8 @@ public class RobotContainer {
     // Configure the trigger bindings
         configureBindings();
         Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-          () -> MathUtil.applyDeadband(m_controller1.getRawAxis(0), OperatorConstants.LEFT_Y_DEADBAND),
-          () -> MathUtil.applyDeadband(m_controller1.getRawAxis(1), OperatorConstants.LEFT_X_DEADBAND),
+          () -> MathUtil.applyDeadband(m_controller1.getRawAxis(1), OperatorConstants.LEFT_Y_DEADBAND),
+          () -> MathUtil.applyDeadband(m_controller1.getRawAxis(0), OperatorConstants.LEFT_X_DEADBAND),
           () -> m_controller2.getX());
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
 
@@ -90,8 +90,8 @@ public class RobotContainer {
   private void configureBindings() {
     //configure some button bindings
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
-    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-0.69));
-    m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 0.4));
+    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-0.75));
+    m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 0.70));
     m_controller2.button(2).toggleOnTrue(new ShootNote(shooter,-0.25));
     m_controller1.button(11).onTrue(new ZeroGyro(drivebase));
     m_controller1.button(3).onTrue(shooter.setShooterMode(ShooterState.SPEAKERAIM));
