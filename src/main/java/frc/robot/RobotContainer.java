@@ -23,6 +23,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Shooter.PivotState;
 import frc.robot.subsystems.Shooter.ShooterState;
 
@@ -91,8 +92,8 @@ public class RobotContainer {
   private void configureBindings() {
     //configure some button bindings
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
-    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-0.75));
-    m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 0.70));
+    m_controller1.button(1).onTrue(intakemaxxxer.setIntakeState(IntakeState.INTAKING));
+    m_controller1.button(2).toggleOnTrue(intakemaxxxer.setIntakeState(IntakeState.OUTTAKING));
     m_controller2.button(2).toggleOnTrue(shooter.setShooterMode(ShooterState.SHOOTING));
     m_controller1.button(11).onTrue(new ZeroGyro(drivebase));
     m_controller1.button(3).onTrue(shooter.setPivotMode(PivotState.SPEAKERAIM));
