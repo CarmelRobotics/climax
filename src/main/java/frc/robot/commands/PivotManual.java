@@ -3,11 +3,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class ShootNote extends Command {
+public class PivotManual extends Command {
     // Called once the command ends or is interrupted.
     Shooter shooter;
     double speed;
-    public ShootNote(Shooter s, double x){
+    public PivotManual(Shooter s, double x){
         shooter = s;
         speed = x;
     }
@@ -17,12 +17,12 @@ public class ShootNote extends Command {
     }
     @Override
     public void execute(){
-        shooter.shoot(-speed);
+        shooter.pivot(speed);
     }
     @Override
     public void end(boolean interrupted)
     {
-        shooter.shoot(0);
+        shooter.pivot(0);
     }
 
     // Returns true when the command should end.

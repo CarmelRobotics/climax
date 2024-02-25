@@ -43,6 +43,7 @@ public class Shooter extends SubsystemBase {
     private DigitalInput limitswitch;
     private CANcoder encoder;
     private Vision limelight;
+    private double encoderOffset = 153;
     private BTS bts;
     private Rotation2d pivotGoal = Rotation2d.fromDegrees(45);
     private ShooterState state = ShooterState.STOW;
@@ -65,13 +66,15 @@ public class Shooter extends SubsystemBase {
     }
     @Override
     public void periodic(){
-       SmartDashboard.putNumber("Pivot angle", getPivotAngle().getDegrees());
+       SmartDashboard.putNumber("Pivot angle", getPivotAngle());
        SmartDashboard.putNumber("Goal angle", pivotGoal.getDegrees());
+       SmartDashboard.putNumber("PID val", pidOutput);
+       SmartDashboard.putNumber("FF output", ffOutput);
        SmartDashboard.putString("Current State",state.toString());
        calcAndApplyControllers();
-       if(limitswitch.get()){
-        setMode(ShooterState.ERROR);
-       }
+    //    if(limitswitch.get()){
+    //     setMode(ShooterState.ERROR);
+    //    }
        switch (state) {
         case SPEAKERSHOOT:
             SpeakerShoot();
@@ -115,10 +118,12 @@ public class Shooter extends SubsystemBase {
         return run(() -> shoot(1));
     }
     public void calcAndApplyControllers(){
-        pidOutput = pivotController.calculate(getPivotAngle().getRadians(), pivotGoal.getRadians());
+        pidOutput = -pivotController.calculate(getPivotAngle(), pivotGoal.getDegrees());
         State profSetpoint = pivotController.getSetpoint();
-        ffOutput = ffController.calculate(profSetpoint.position, profSetpoint.velocity);
-        pivotmotorone.setVoltage(pidOutput + ffOutput);
+        ffOutput = -ffController.calculate(profSetpoint.position, profSetpoint.velocity);
+        SmartDashboard.putNumber("Output to Pivot", pidOutput + ffOutput);
+       // pivotmotorone.set(pidOutput + ffOutput);
+       // ^ uncomment above to make it pivot 
     }
     //used for going under stage
     public void stow(){
@@ -140,8 +145,8 @@ public class Shooter extends SubsystemBase {
     }  
 
 
-    public Rotation2d getPivotAngle(){
-        return Rotation2d.fromRotations(encoder.getAbsolutePosition().getValue());
+    public double getPivotAngle(){
+       return (Rotation2d.fromRotations(encoder.getAbsolutePosition().getValue())).getDegrees() + encoderOffset;
     }
     //public double getNavxPitch(){
       //  return navx.getPitch();
@@ -153,7 +158,7 @@ public class Shooter extends SubsystemBase {
             l.setMode(STATUS.DEFAULT);
         }
         shootmotorone.set(speed);
-        shootmotortwo.set(-speed);
+        shootmotortwo.set(speed);
     }
     public void pivot(double speed){
         pivotmotorone.set(speed);
@@ -173,7 +178,7 @@ public class Shooter extends SubsystemBase {
     // }
     public void pivotToAngle(double angle){
         pivotGoal = Rotation2d.fromDegrees(angle);
-        pivotController.reset(getPivotAngle().getRadians(),getPivotVelocity());
+        pivotController.reset(Rotation2d.fromDegrees(getPivotAngle()).getRadians(),getPivotVelocity());
     }
     public boolean isFalling(){
         return ((pivotmotorone.getOutputCurrent() == 0));

@@ -65,20 +65,20 @@ public final class Constants
     public final static int SHOOTER_PIVOTTWO_CAN = 17;
     public final static int SHOOTER_PIVOTTHREE_CAN = 12;
     public final static double FALL_CANCEL_SPEED = 0.1;
-    public final static int PIVOT_CURRENT_LIMIT = 10;
+    public final static int PIVOT_CURRENT_LIMIT = 20;
     public final static int PIVOT_CANCODER_ID = 21;
     //pid controller
-    public final static double SHOOTER_KP = 0.001;
+    public final static double SHOOTER_KP = 0.000001;
     public final static double SHOOTER_KI = 0.00;
-    public final static double SHOOTER_KD = 0.00;
-    public final static double SHOOTER_MAX_VELOCITY = 0.1;
-    public final static double SHOOTER_MAX_ACCEL = 0.1;
+    public final static double SHOOTER_KD = 0.00001;
+    public final static double SHOOTER_MAX_VELOCITY = 0.5;
+    public final static double SHOOTER_MAX_ACCEL = 0.25;
     public final static ProfiledPIDController SHOOTER_PID_CONTROLLER = new ProfiledPIDController(SHOOTER_KP, SHOOTER_KI, SHOOTER_KD, new Constraints(SHOOTER_MAX_VELOCITY, SHOOTER_MAX_ACCEL));
     //feedforward
-    public final static double SHOOTER_KA = 0.08;
+    public final static double SHOOTER_KA = 0.02;
     public final static double SHOOTER_KV = 1.56;
     public final static double SHOOTER_KS = 0.00;
-    public final static double SHOOTER_KG = 1.55;
+    public final static double SHOOTER_KG = 0.9;
     public final static ArmFeedforward SHOOTER_FF_CONTROLLER = new ArmFeedforward(SHOOTER_KS, SHOOTER_KG, SHOOTER_KV);
 
   }

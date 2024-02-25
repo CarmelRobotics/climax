@@ -6,10 +6,12 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoAim;
+import frc.robot.commands.AutoShoot;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveZero;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.LED_VIBE;
+import frc.robot.commands.PivotManual;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.SwerveCommandField;
@@ -88,16 +90,20 @@ public class RobotContainer {
   private void configureBindings() {
     //configure some button bindings
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
-    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-0.7));
-    m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 0.7));
-    m_controller2.button(2).toggleOnTrue(new ShootNote(shooter));
+    m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-0.69));
+    m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 0.4));
+    m_controller2.button(2).toggleOnTrue(new ShootNote(shooter,-0.25));
     m_controller1.button(11).onTrue(new ZeroGyro(drivebase));
     m_controller1.button(3).onTrue(shooter.setShooterMode(ShooterState.SPEAKERAIM));
     m_controller1.button(4).onTrue(shooter.setShooterMode(ShooterState.AMPAIM));
     m_controller1.button(5).onTrue(shooter.setShooterMode(ShooterState.STOW));
-    
+    m_controller2.button(1).toggleOnTrue(new ShootNote(shooter,1));
     m_controller1.button(9).toggleOnTrue(new LED_VIBE(ledManager));
+    m_controller2.button(5).whileTrue(new PivotManual(shooter, 0.1));
+    m_controller2.button(6).whileTrue(new PivotManual(shooter, -0.1));
+  
   }
+
 
 
   /**
@@ -117,19 +123,32 @@ public class RobotContainer {
     
     drivebase.resetOdometry(path.getPreviewStartingHolonomicPose());
     //drivebase.driveToPose(new Pose2d(drivebase.getPose().getX(),drivebase.getPose().getY(),Rotation2d.fromDegrees(0)));
+    // return new SequentialCommandGroup(
+    //  new setHeadingCorrection(drivebase, true),
+    //  new ZeroGyro(drivebase),
+    //  drivebase.postPathplannerPath("test"),
+    //  new DriveZero(drivebase),
+    //  drivebase.postPathplannerPath("test2"),
+    //  new DriveZero(drivebase),
+    //  drivebase.postPathplannerPath("test3"),
+    //  new DriveZero(drivebase),
+    //  drivebase.postPathplannerPath("test4"),
+    //  new DriveZero(drivebase),
+    //  new setHeadingCorrection(drivebase, false)
+    // );
     return new SequentialCommandGroup(
-     new setHeadingCorrection(drivebase, true),
-     new ZeroGyro(drivebase),
-     drivebase.postPathplannerPath("test"),
+      //new AutoShoot(shooter, 1),
+      new setHeadingCorrection(drivebase, true),
+      new ZeroGyro(drivebase),
+      drivebase.postPathplannerPath("2note1"),
+      new DriveZero(drivebase),
+      new runIntakeforTime(intakemaxxxer,0.5, 0.5),
+      drivebase.postPathplannerPath("2note2"),
      new DriveZero(drivebase),
-     drivebase.postPathplannerPath("test2"),
-     new DriveZero(drivebase),
-     drivebase.postPathplannerPath("test3"),
-     new DriveZero(drivebase),
-     drivebase.postPathplannerPath("test4"),
-     new DriveZero(drivebase),
+     //new AutoShoot(shooter,1)
      new setHeadingCorrection(drivebase, false)
     );
+    
 }
 }
 
