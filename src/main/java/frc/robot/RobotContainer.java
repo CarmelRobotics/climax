@@ -23,6 +23,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Shooter.PivotState;
 import frc.robot.subsystems.Shooter.ShooterState;
 
 import java.io.File;
@@ -92,11 +93,11 @@ public class RobotContainer {
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
     m_controller1.button(1).toggleOnTrue(new RunIntake(intakemaxxxer,-0.75));
     m_controller1.button(2).toggleOnTrue(new RunIntake(intakemaxxxer, 0.70));
-    m_controller2.button(2).toggleOnTrue(new ShootNote(shooter,-0.25));
+    m_controller2.button(2).toggleOnTrue(shooter.setShooterMode(ShooterState.SHOOTING));
     m_controller1.button(11).onTrue(new ZeroGyro(drivebase));
-    m_controller1.button(3).onTrue(shooter.setShooterMode(ShooterState.SPEAKERAIM));
-    m_controller1.button(4).onTrue(shooter.setShooterMode(ShooterState.AMPAIM));
-    m_controller1.button(5).onTrue(shooter.setShooterMode(ShooterState.STOW));
+    m_controller1.button(3).onTrue(shooter.setPivotMode(PivotState.SPEAKERAIM));
+    m_controller1.button(4).onTrue(shooter.setPivotMode(PivotState.AMPAIM));
+    m_controller1.button(5).onTrue(shooter.setPivotMode(PivotState.STOW));
     m_controller2.button(1).toggleOnTrue(new ShootNote(shooter,1));
     m_controller1.button(9).toggleOnTrue(new LED_VIBE(ledManager));
     m_controller2.button(5).whileTrue(new PivotManual(shooter, 0.1));

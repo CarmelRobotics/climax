@@ -46,7 +46,8 @@ public class Shooter extends SubsystemBase {
     private double encoderOffset = 153;
     private BTS bts;
     private Rotation2d pivotGoal = Rotation2d.fromDegrees(45);
-    private ShooterState state = ShooterState.STOW;
+    private PivotState pivotState = PivotState.STOW;
+    private ShooterState shooterState = ShooterState.DEFAULT;
     public double secondsPerDegree;
     private double pidOutput;
     private double ffOutput;
@@ -70,12 +71,23 @@ public class Shooter extends SubsystemBase {
        SmartDashboard.putNumber("Goal angle", pivotGoal.getDegrees());
        SmartDashboard.putNumber("PID val", pidOutput);
        SmartDashboard.putNumber("FF output", ffOutput);
-       SmartDashboard.putString("Current State",state.toString());
+       SmartDashboard.putString("Current State",pivotState.toString());
        calcAndApplyControllers();
     //    if(limitswitch.get()){
     //     setMode(ShooterState.ERROR);
     //    }
-       switch (state) {
+       switch (shooterState) {
+        case SHOOTING: 
+            shoot(1);
+            break;
+        case AMP:
+            shoot(0.37);
+            break;
+        default:
+            shoot(0.05);
+            break;
+       }
+       switch (pivotState) {
         case SPEAKERSHOOT:
             SpeakerShoot();
             break;
@@ -100,7 +112,7 @@ public class Shooter extends SubsystemBase {
        
        
     }
-    public static enum ShooterState{
+    public static enum PivotState{
         SPEAKERSHOOT,
         TRANSFER,
         STOW,
@@ -108,11 +120,22 @@ public class Shooter extends SubsystemBase {
         AMPAIM,
         SPEAKERAIM
     }
-    public void setMode(ShooterState state){
-        this.state = state;
+    public static enum ShooterState{
+        SHOOTING,
+        AMP,
+        DEFAULT
+    }
+    public void setPivot(PivotState state){
+        this.pivotState = state;
+    }
+    public void setShoot(ShooterState state){
+
+    }
+    public Command setPivotMode(PivotState state){
+        return run(() -> setPivot(state));
     }
     public Command setShooterMode(ShooterState state){
-        return run(() -> setMode(state));
+        return run(() -> setShoot(state));
     }
     public Command shootNote(){
         return run(() -> shoot(1));
