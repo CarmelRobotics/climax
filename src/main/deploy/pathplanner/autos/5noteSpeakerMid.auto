@@ -6,21 +6,28 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ZeroGyro"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SetHeadingCorrectionTrue"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ZeroGyro"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetHeadingCorrectionTrue"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -36,15 +43,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "4note2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4note2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -60,15 +74,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "4note4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4note4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -84,15 +105,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "4note6"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4note6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -108,27 +136,41 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "5note1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5note1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stop"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SetHeadingCorrectionFalse"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetHeadingCorrectionFalse"
+                }
+              }
+            ]
           }
         }
       ]
