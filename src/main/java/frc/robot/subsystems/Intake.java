@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,6 +24,7 @@ public class Intake extends SubsystemBase{
     }
     @Override
     public void periodic(){
+        SmartDashboard.putString("Current Intake State", state.toString());
         switch(state){
             case INTAKING:
                 runIntake(-0.75);
@@ -33,7 +35,7 @@ public class Intake extends SubsystemBase{
             case TRANSFERING:
                 runIntake(-1);
             default:
-                runIntake(-0.02);
+                runIntake(-0);
                 break;
             
         }

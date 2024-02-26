@@ -78,13 +78,13 @@ public class Shooter extends SubsystemBase {
     //    }
        switch (shooterState) {
         case SHOOTING: 
-            shoot(1);
+            shoot(-1);
             break;
         case AMP:
-            shoot(0.37);
+            shoot(-0.37);
             break;
         default:
-            shoot(0.05);
+            shoot(-0.07);
             break;
        }
        switch (pivotState) {
