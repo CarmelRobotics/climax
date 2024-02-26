@@ -29,6 +29,7 @@ import frc.robot.subsystems.Shooter.ShooterState;
 
 import java.io.File;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
@@ -67,7 +68,7 @@ public class RobotContainer {
       new CommandJoystick(OperatorConstants.JOYSTICK_2_PORT);
   private final CommandJoystick m_guitar =
       new CommandJoystick(OperatorConstants.GUITAR_PORT);
-
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -77,7 +78,12 @@ public class RobotContainer {
           () -> MathUtil.applyDeadband(m_controller1.getRawAxis(0), OperatorConstants.LEFT_X_DEADBAND),
           () -> m_controller2.getX());
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-
+      NamedCommands.registerCommand("intake", intakemaxxxer.setIntakeState(IntakeState.INTAKING));
+      NamedCommands.registerCommand("ZeroGyro",new ZeroGyro(drivebase));
+      NamedCommands.registerCommand("shoot", new AutoShoot(shooter, 1));
+      NamedCommands.registerCommand("SetHeadingCorrectionTrue", new setHeadingCorrection(drivebase, true));
+      NamedCommands.registerCommand("SetHeadingCorrectionFalse", new setHeadingCorrection(drivebase, false));
+      NamedCommands.registerCommand("stop", new DriveZero(drivebase));
   }
 
   /**
