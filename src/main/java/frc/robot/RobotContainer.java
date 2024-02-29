@@ -127,7 +127,7 @@ public class RobotContainer {
     Rotation2d rotate = drivebase.getHeading();
     Pose2d zero = new Pose2d(drivebase.getPose().getX(),drivebase.getPose().getY(),Rotation2d.fromDegrees(0));
     //return new SequentialCommandGroup(drivebase.driveToPose(new Pose2d(x,y,rotate)), new DriveZero(drivebase));
-    PathPlannerPath path = PathPlannerPath.fromPathFile("test");
+    PathPlannerPath path = PathPlannerPath.fromPathFile("4note1");
     
     drivebase.resetOdometry(path.getPreviewStartingHolonomicPose());
     //drivebase.driveToPose(new Pose2d(drivebase.getPose().getX(),drivebase.getPose().getY(),Rotation2d.fromDegrees(0)));
@@ -144,18 +144,19 @@ public class RobotContainer {
     //  new DriveZero(drivebase),
     //  new setHeadingCorrection(drivebase, false)
     // );
-    return new SequentialCommandGroup(
-      //new AutoShoot(shooter, 1),
-      new setHeadingCorrection(drivebase, true),
-      new ZeroGyro(drivebase),
-      drivebase.postPathplannerPath("2note1"),
-      new DriveZero(drivebase),
-      new runIntakeforTime(intakemaxxxer,0.5, 0.5),
-      drivebase.postPathplannerPath("2note2"),
-     new DriveZero(drivebase),
-     //new AutoShoot(shooter,1)
-     new setHeadingCorrection(drivebase, false)
-    );
+    return drivebase.getAutonomousCommand("5noteSpeakerMid");
+    // return new SequentialCommandGroup(
+    //   //new AutoShoot(shooter, 1),
+    //   new setHeadingCorrection(drivebase, true),
+    //   new ZeroGyro(drivebase),
+    //   drivebase.postPathplannerPath("2note1"),
+    //   new DriveZero(drivebase),
+    //   new runIntakeforTime(intakemaxxxer,0.5, 0.5),
+    //   drivebase.postPathplannerPath("2note2"),
+    //  new DriveZero(drivebase),
+    //  //new AutoShoot(shooter,1)
+    //  new setHeadingCorrection(drivebase, false)
+    // );
     
 }
 }
