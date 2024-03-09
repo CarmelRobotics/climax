@@ -20,7 +20,7 @@ public class LED extends SubsystemBase {
             case ERROR -> { if (status != STATUS.DEFAULT) mode = status; }
             default -> { mode = status; }
         }
-        System.out.println("<LED INTERNALS> - " + status + " mode enabled");
+        //System.out.println("<LED INTERNALS> - " + status + " mode enabled");
     }
 
     public STATUS getState() { return mode; }

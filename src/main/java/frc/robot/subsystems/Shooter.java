@@ -37,24 +37,24 @@ public class Shooter extends SubsystemBase {
    // private double amountMove;
     private double targetAngle;
     private SwerveSubsystem swerve;
-    private LED l;
+    //private LED l;
     private ProfiledPIDController pivotController;
     private ArmFeedforward ffController;
     private DigitalInput limitswitch;
     private CANcoder encoder;
     private Vision limelight;
     private double encoderOffset = 153;
-    private BTS bts;
+  
     private Rotation2d pivotGoal = Rotation2d.fromDegrees(45);
     private PivotState pivotState = PivotState.STOW;
     private ShooterState shooterState = ShooterState.DEFAULT;
     public double secondsPerDegree;
     private double pidOutput;
     private double ffOutput;
-    public Shooter(SwerveSubsystem s, LED ledSystem){
+    public Shooter(SwerveSubsystem s){
         limitswitch = new DigitalInput(0);
         encoder = new CANcoder(21);
-        bts = new BTS();
+
         shootmotorone = new RockinTalon(frc.robot.Constants.Shooter.SHOOTER_MOTORONE_CAN);
         shootmotortwo = new RockinTalon(frc.robot.Constants.Shooter.SHOOTER_MOTORTWO_CAN);
         limelight = new Vision();
@@ -63,7 +63,6 @@ public class Shooter extends SubsystemBase {
         pivotController = Constants.Shooter.SHOOTER_PID_CONTROLLER;
         ffController = Constants.Shooter.SHOOTER_FF_CONTROLLER;
         swerve = s;
-        l = ledSystem;
     }
     @Override
     public void periodic(){
@@ -71,6 +70,7 @@ public class Shooter extends SubsystemBase {
        SmartDashboard.putNumber("Goal angle", pivotGoal.getDegrees());
        SmartDashboard.putNumber("PID val", pidOutput);
        SmartDashboard.putNumber("FF output", ffOutput);
+       SmartDashboard.putNumber("Shooter Speed", getAverageRollerSpeed());
        SmartDashboard.putString("Current State",pivotState.toString());
        calcAndApplyControllers();
     //    if(limitswitch.get()){
@@ -78,12 +78,12 @@ public class Shooter extends SubsystemBase {
     //    }
        switch (shooterState) {
         case SHOOTING: 
-            shoot(-1);
+            shoot(1);
             break;
         case AMP:
             shoot(-0.37);
             break;
-        default:
+        case DEFAULT:
             shoot(-0.07);
             break;
        }
@@ -124,6 +124,9 @@ public class Shooter extends SubsystemBase {
         SHOOTING,
         AMP,
         DEFAULT
+    }
+    public double getAverageRollerSpeed(){
+        return (shootmotorone.get() + shootmotortwo.get())/2;
     }
     public void setPivot(PivotState state){
         this.pivotState = state;
@@ -175,16 +178,17 @@ public class Shooter extends SubsystemBase {
       //  return navx.getPitch();
     //}
     public void shoot(double speed){
-        if (speed != 0) {
-            l.setMode(STATUS.SHOOTING);
-        } else {
-            l.setMode(STATUS.DEFAULT);
-        }
+        // if (speed != 0) {
+        //     l.setMode(STATUS.SHOOTING);
+        // } else {
+        //     l.setMode(STATUS.DEFAULT);
+        // }
+    
         shootmotorone.set(speed);
         shootmotortwo.set(speed);
     }
     public void pivot(double speed){
-        pivotmotorone.set(speed);
+       // pivotmotorone.set(speed);
     }
     public double getPosition(){
         return pivotmotorone.getEncoder().getPosition();

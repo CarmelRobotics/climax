@@ -22,11 +22,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import frc.robot.Constants;
 import frc.robot.Constants.AutonConstants;
-
 import java.io.File;
 import java.util.function.DoubleSupplier;
+//import org.photonvision.PhotonCamera;
+//import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -47,7 +47,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
-  public        double      maximumSpeed = Units.feetToMeters(10);
+  public        double      maximumSpeed = Units.feetToMeters(14.5);
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -74,15 +74,15 @@ public class SwerveSubsystem extends SubsystemBase
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
-      //swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
+      swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
       // Alternative method if you don't want to supply the conversion factor via JSON files.
-       swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
     {
       throw new RuntimeException(e);
     }
     swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
-    //swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
+    swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     setupPathPlanner();
   }
 
@@ -131,8 +131,6 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
   
-  
-
   /**
    * Get the path follower with events.
    *
@@ -144,9 +142,8 @@ public class SwerveSubsystem extends SubsystemBase
     // Create a path following command using AutoBuilder. This will also trigger event markers.
     return new PathPlannerAuto(pathName);
   }
-  public Command postPathplannerPath(String Pathname){
-    return AutoBuilder.followPath(PathPlannerPath.fromPathFile(Pathname));
-    
+  public Command postPathplannerPath(String pathName){
+    return AutoBuilder.followPath(PathPlannerPath.fromPathFile(pathName));
   }
 
   /**
@@ -159,8 +156,8 @@ public class SwerveSubsystem extends SubsystemBase
   {
 // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
-        2, 3,
-        swerveDrive.getMaximumAngularVelocity(), Units.degreesToRadians(200));
+        swerveDrive.getMaximumVelocity(), 4.0,
+        swerveDrive.getMaximumAngularVelocity(), Units.degreesToRadians(720));
 
 // Since AutoBuilder is configured, we can use it to build pathfinding commands
     return AutoBuilder.pathfindToPose(
@@ -169,9 +166,6 @@ public class SwerveSubsystem extends SubsystemBase
         0.0, // Goal end velocity in meters/sec
         0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
                                      );
-  }
-  public Command straighten(){
-    return driveToPose(new Pose2d(getPose().getX(),getPose().getY(),Rotation2d.fromDegrees(0)));
   }
 
   /**
@@ -225,28 +219,28 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return SysId Drive Command
    */
-  // public Command sysIdDriveMotorCommand()
-  // {
-  //   return SwerveDriveTest.generateSysIdCommand(
-  //       SwerveDriveTest.setDriveSysIdRoutine(
-  //           new Config(),
-  //           this, swerveDrive, 12),
-  //       3.0, 5.0, 3.0);
-  // }
+  public Command sysIdDriveMotorCommand()
+  {
+    return SwerveDriveTest.generateSysIdCommand(
+        SwerveDriveTest.setDriveSysIdRoutine(
+            new Config(),
+            this, swerveDrive, 12),
+        3.0, 5.0, 3.0);
+  }
 
-  // /**
-  //  * Command to characterize the robot angle motors using SysId
-  //  *
-  //  * @return SysId Angle Command
-  //  */
-  // public Command sysIdAngleMotorCommand()
-  // {
-  //   return SwerveDriveTest.generateSysIdCommand(
-  //       SwerveDriveTest.setAngleSysIdRoutine(
-  //           new Config(),
-  //           this, swerveDrive),
-  //       3.0, 5.0, 3.0);
-  // }
+  /**
+   * Command to characterize the robot angle motors using SysId
+   *
+   * @return SysId Angle Command
+   */
+  public Command sysIdAngleMotorCommand()
+  {
+    return SwerveDriveTest.generateSysIdCommand(
+        SwerveDriveTest.setAngleSysIdRoutine(
+            new Config(),
+            this, swerveDrive),
+        3.0, 5.0, 3.0);
+  }
 
   /**
    * Command to drive the robot using translative values and heading as angular velocity.
@@ -263,8 +257,8 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
                                           Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity()),
                         Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
-                        true,
-                        false);
+                        false,
+                        true);
     });
   }
 
@@ -313,8 +307,8 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
-    //zeroGyro();
   }
+
   @Override
   public void simulationPeriodic()
   {
@@ -507,8 +501,5 @@ public class SwerveSubsystem extends SubsystemBase
   public void addFakeVisionReading()
   {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
-  }
-  public void setHeadingCorrection(boolean state){
-    swerveDrive.setHeadingCorrection(state);
   }
 }

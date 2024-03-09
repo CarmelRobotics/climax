@@ -11,13 +11,18 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DriveZero;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.LED_VIBE;
+import frc.robot.commands.MoveClimber;
 import frc.robot.commands.PivotManual;
+import frc.robot.commands.RunBTS;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.SwerveCommandField;
 import frc.robot.commands.ZeroGyro;
+import frc.robot.commands.runBTSfortime;
 import frc.robot.commands.runIntakeforTime;
 import frc.robot.commands.setHeadingCorrection;
+import frc.robot.subsystems.BTS;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
@@ -39,6 +44,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -59,9 +65,14 @@ public class RobotContainer {
                                                                          "swerve"));
   // Control Devices
   
-  public  final LED ledManager = new LED();
-  private final Shooter shooter = new Shooter(drivebase, ledManager);
+  //public  final LED ledManager = new LED();
+  private final Shooter shooter = new Shooter(drivebase);
+  Command oneNote;
+  private final BTS bts = new BTS();
   private final Intake intakemaxxxer = new Intake();
+  private final Climber climberLeft = new Climber(true);
+  private final Climber climberRight = new Climber(false);
+
   private final CommandJoystick m_controller1 =
       new CommandJoystick(OperatorConstants.JOYSTICK_1_PORT);
   private final CommandJoystick m_controller2 =
@@ -78,12 +89,95 @@ public class RobotContainer {
           () -> MathUtil.applyDeadband(m_controller1.getRawAxis(0), OperatorConstants.LEFT_X_DEADBAND),
           () -> m_controller2.getX());
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+      oneNote = new ParallelCommandGroup(new AutoShoot(shooter, 1), new runBTSfortime(bts,1,1));
       NamedCommands.registerCommand("intake", intakemaxxxer.setIntakeState(IntakeState.INTAKING));
       NamedCommands.registerCommand("ZeroGyro",new ZeroGyro(drivebase));
-      NamedCommands.registerCommand("shoot", new AutoShoot(shooter, 1));
+      NamedCommands.registerCommand("shoot", oneNote);
       NamedCommands.registerCommand("SetHeadingCorrectionTrue", new setHeadingCorrection(drivebase, true));
       NamedCommands.registerCommand("SetHeadingCorrectionFalse", new setHeadingCorrection(drivebase, false));
       NamedCommands.registerCommand("stop", new DriveZero(drivebase));
+      Command intake = NamedCommands.getCommand("intake");
+      Command resetGyro = NamedCommands.getCommand("ZeroGyro");
+      Command shoot = oneNote;
+      Command headingTrue = NamedCommands.getCommand("SetHeadingCorrectionTrue");
+      Command headingFalse = NamedCommands.getCommand("SetHeadingCorrectionFalse");
+      Command stop = NamedCommands.getCommand("stop");
+      
+      //set up autos
+      // SequentialCommandGroup sourceAutothreeNote = new SequentialCommandGroup(
+      //   headingTrue,
+      //   resetGyro,
+      //   drivebase.postPathplannerPath("sourceside1"),
+      //   stop,
+      //   shoot,
+      //   drivebase.postPathplannerPath("sourceside2"),
+      //   stop,
+      //   intake,
+      //   drivebase.postPathplannerPath("sourceside3"),
+      //   stop,
+      //   shoot,
+      //   drivebase.postPathplannerPath("sourceside4"),
+      //   stop,
+      //   intake,
+      //   drivebase.postPathplannerPath("sourceside5"),
+      //   stop,
+      //   shoot
+      // );
+      // SequentialCommandGroup fourNote = new SequentialCommandGroup(
+      //   headingTrue,
+      //   resetGyro,
+      //   shoot,
+      //   drivebase.postPathplannerPath("4note1"),
+      //   stop,
+      //   intake,
+      //   drivebase.postPathplannerPath("4note2"),
+      //   stop,
+      //   shoot,
+      //   drivebase.postPathplannerPath("4note3"),
+      //   stop,
+      //   intake,
+      //   drivebase.postPathplannerPath("4note4"),
+      //   stop,
+      //   shoot,
+      //   drivebase.postPathplannerPath("4note5"),
+      //   stop,
+      //   intake,
+      //   drivebase.postPathplannerPath("4note6"),
+      //   stop,
+      //   shoot,
+      //   headingFalse
+      // );
+      // SequentialCommandGroup twonotemid = new SequentialCommandGroup(
+      //     headingTrue,
+      //     resetGyro,
+      //     shoot,
+      //     drivebase.postPathplannerPath("2note1"),
+      //     stop,
+      //     intake,
+      //     drivebase.postPathplannerPath("2note2"),
+      //     stop,
+      //     shoot,
+      //     headingFalse
+      // );
+      // SequentialCommandGroup threenoteMid = new SequentialCommandGroup(
+      //   headingTrue,
+      //   resetGyro,
+      //   shoot,
+      //   drivebase.postPathplannerPath("3notemid1"),
+      //   stop,
+      //   intake,
+      //   drivebase.postPathplannerPath("3notemid2"),
+      //   stop,
+      //   shoot,
+      //   drivebase.postPathplannerPath("3notemid3"),
+      //   stop,
+      //   intake,
+      //   drivebase.postPathplannerPath("3notemid4"),
+      //   stop,
+      //   shoot,
+      //   headingFalse
+      //);
+
   }
 
   /**
@@ -98,18 +192,25 @@ public class RobotContainer {
   private void configureBindings() {
     //configure some button bindings
     m_controller1.button(5).onTrue(new AutoAim(shooter, 45));
-    m_controller1.button(1).onTrue(intakemaxxxer.setIntakeState(IntakeState.INTAKING));
-    m_controller1.button(2).toggleOnTrue(intakemaxxxer.setIntakeState(IntakeState.OUTTAKING));
-    m_controller2.button(2).toggleOnTrue(shooter.setShooterMode(ShooterState.SHOOTING));
+    m_controller2.button(2).whileTrue(new ParallelCommandGroup(new RunIntake(intakemaxxxer, -0.69), new RunBTS(bts, 0.15)));
+    m_controller1.button(2).whileTrue(new RunIntake(intakemaxxxer,1));
+    //m_controller2.button(2).toggleOnTrue(new ZeroGyro(drivebase));
+    m_controller1.button(1).whileTrue(new RunIntake(intakemaxxxer, -0.69));
     m_controller1.button(11).onTrue(new ZeroGyro(drivebase));
     m_controller1.button(3).onTrue(shooter.setPivotMode(PivotState.SPEAKERAIM));
     m_controller1.button(4).onTrue(shooter.setPivotMode(PivotState.AMPAIM));
     m_controller1.button(5).onTrue(shooter.setPivotMode(PivotState.STOW));
-    m_controller2.button(1).toggleOnTrue(new ShootNote(shooter,1));
-    m_controller1.button(9).toggleOnTrue(new LED_VIBE(ledManager));
-    m_controller2.button(5).whileTrue(new PivotManual(shooter, 0.1));
-    m_controller2.button(6).whileTrue(new PivotManual(shooter, -0.1));
-  
+    m_controller2.button(1).whileTrue(new ParallelCommandGroup(new RunBTS(bts,1), new ShootNote(shooter, 1)));
+    m_controller2.button(3).whileTrue(new ShootNote(shooter, -0.5));
+   // m_controller1.button(9).toggleOnTrue(new LED_VIBE(ledManager));
+    m_controller2.button(5).whileTrue(new PivotManual(shooter, 0.75));
+    m_controller2.button(6).whileTrue(new PivotManual(shooter, -0.75));
+    m_guitar.button(1).whileTrue(new MoveClimber(climberLeft,  .5));
+    m_guitar.button(2).whileTrue(new MoveClimber(climberRight,  .5));
+    m_guitar.button(3).whileTrue(new MoveClimber(climberLeft, (.5*-1)));
+    m_guitar.button(4).whileTrue(new MoveClimber(climberRight, (.5*-1)));
+
+    
   }
 
 
@@ -127,7 +228,7 @@ public class RobotContainer {
     Rotation2d rotate = drivebase.getHeading();
     Pose2d zero = new Pose2d(drivebase.getPose().getX(),drivebase.getPose().getY(),Rotation2d.fromDegrees(0));
     //return new SequentialCommandGroup(drivebase.driveToPose(new Pose2d(x,y,rotate)), new DriveZero(drivebase));
-    PathPlannerPath path = PathPlannerPath.fromPathFile("test");
+    PathPlannerPath path = PathPlannerPath.fromPathFile("4note1");
     
     drivebase.resetOdometry(path.getPreviewStartingHolonomicPose());
     //drivebase.driveToPose(new Pose2d(drivebase.getPose().getX(),drivebase.getPose().getY(),Rotation2d.fromDegrees(0)));
@@ -144,19 +245,24 @@ public class RobotContainer {
     //  new DriveZero(drivebase),
     //  new setHeadingCorrection(drivebase, false)
     // );
-    return new SequentialCommandGroup(
-      //new AutoShoot(shooter, 1),
-      new setHeadingCorrection(drivebase, true),
-      new ZeroGyro(drivebase),
-      drivebase.postPathplannerPath("2note1"),
-      new DriveZero(drivebase),
-      new runIntakeforTime(intakemaxxxer,0.5, 0.5),
-      drivebase.postPathplannerPath("2note2"),
-     new DriveZero(drivebase),
-     //new AutoShoot(shooter,1)
-     new setHeadingCorrection(drivebase, false)
-    );
+    // return new SequentialCommandGroup(
+    //   //new AutoShoot(shooter, 1),
+    //   new setHeadingCorrection(drivebase, true),
+    //   new ZeroGyro(drivebase),
+    //   drivebase.postPathplannerPath("2note1"),
+    //   new DriveZero(drivebase),
+    //   new runIntakeforTime(intakemaxxxer,0.5, 0.5),
+    //   drivebase.postPathplannerPath("2note2"),
+    //  new DriveZero(drivebase),
+    //  //new AutoShoot(shooter,1)
+    //  new setHeadingCorrection(drivebase, false)
+    // );
+    //return drivebase.getAutonomousCommand("4NoteSpeakerMid");
+    return oneNote;
+
     
+
+   // return drivebase.getAutonomousCommand("2NoteSpeakerMid");
 }
 }
 

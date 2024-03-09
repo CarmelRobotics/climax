@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -64,7 +66,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
 
-    m_robotContainer.ledManager.setMode(STATUS.AUTO);
+    //m_robotContainer.ledManager.setMode(STATUS.AUTO);
   }
 
   /** This function is called periodically during autonomous. */
@@ -82,7 +84,7 @@ public class Robot extends TimedRobot {
     }
 
     
-    m_robotContainer.ledManager.setMode(STATUS.DEFAULT);
+   // m_robotContainer.ledManager.setMode(STATUS.DEFAULT);
     
   }
 

@@ -22,24 +22,24 @@ public class Intake extends SubsystemBase{
         intakemotorOne = new CANSparkMax(Constants.Intake.INTAKE_CAN_ONE,MotorType.kBrushless );
         //intakemotorTwo = new CANSparkMax(Constants.Intake.INTAKE_CAN_TWO, MotorType.kBrushless);
     }
-    @Override
-    public void periodic(){
-        SmartDashboard.putString("Current Intake State", state.toString());
-        switch(state){
-            case INTAKING:
-                runIntake(-0.75);
-                break;
-            case OUTTAKING:
-                runIntake(1);
-                break;
-            case TRANSFERING:
-                runIntake(-1);
-            default:
-                runIntake(-0);
-                break;
+   // @Override
+    // public void periodic(){
+    //     SmartDashboard.putString("Current Intake State", state.toString());
+    //     switch(state){
+    //         case INTAKING:
+    //             runIntake(-0.75);
+    //             break;
+    //         case OUTTAKING:
+    //             runIntake(1);
+    //             break;
+    //         case TRANSFERING:
+    //             runIntake(-1);
+    //         default:
+    //             runIntake(-0);
+    //             break;
             
-        }
-    }
+      //  }
+    //}
     public void runIntake(double speed){
         intakemotorOne.set(speed);
         //intakemotorTwo.set(-speed);

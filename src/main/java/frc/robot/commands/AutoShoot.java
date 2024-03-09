@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterState;
 
 public class AutoShoot extends Command {
     // Called once the command ends or is interrupted.
@@ -17,6 +18,7 @@ public class AutoShoot extends Command {
     @Override
     public void initialize(){
         timey.start();
+        shooter.setShoot(ShooterState.SHOOTING);
     }
     @Override
     public void execute(){
@@ -26,6 +28,7 @@ public class AutoShoot extends Command {
     public void end(boolean interrupted)
     {
         shooter.shoot(0);
+        shooter.setShoot(ShooterState.DEFAULT);
         timey.stop();
         timey.reset();
     }
@@ -34,6 +37,6 @@ public class AutoShoot extends Command {
   @Override
     public boolean isFinished()
     {
-     return timey.get() > 2;
+     return timey.get() > 1;
      } 
 }   

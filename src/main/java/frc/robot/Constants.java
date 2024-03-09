@@ -70,16 +70,16 @@ public final class Constants
     //pid controller
     public final static double SHOOTER_KP = 0.000001;
     public final static double SHOOTER_KI = 0.00;
-    public final static double SHOOTER_KD = 0.00001;
+    public final static double SHOOTER_KD = 0.000010;
     public final static double SHOOTER_MAX_VELOCITY = 0.5;
     public final static double SHOOTER_MAX_ACCEL = 0.25;
     public final static ProfiledPIDController SHOOTER_PID_CONTROLLER = new ProfiledPIDController(SHOOTER_KP, SHOOTER_KI, SHOOTER_KD, new Constraints(SHOOTER_MAX_VELOCITY, SHOOTER_MAX_ACCEL));
     //feedforward
-    public final static double SHOOTER_KA = 0.02;
-    public final static double SHOOTER_KV = 1.56;
+    public final static double SHOOTER_KA = 0.2;
+    public final static double SHOOTER_KV = 1;
     public final static double SHOOTER_KS = 0.00;
-    public final static double SHOOTER_KG = 0.9;
-    public final static ArmFeedforward SHOOTER_FF_CONTROLLER = new ArmFeedforward(SHOOTER_KS, SHOOTER_KG, SHOOTER_KV);
+    public final static double SHOOTER_KG = 0.2;
+    public final static ArmFeedforward SHOOTER_FF_CONTROLLER = new ArmFeedforward(SHOOTER_KS, SHOOTER_KG, SHOOTER_KV,SHOOTER_KA);
 
   }
   public static final class Intake
@@ -97,6 +97,10 @@ public final class Constants
   }
   public static final class BTS{
     public static final int BTS_MOTOR_CAN = 10;
+  }
+  public static final class ClimbConstants{
+    public static final int CLIMBER_ONE_CAN = 30;
+    public static final int CLIMBER_TWO_CAN = 31;
   }
   public static class OperatorConstants
   {
