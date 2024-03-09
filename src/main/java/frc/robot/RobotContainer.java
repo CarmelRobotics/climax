@@ -245,24 +245,19 @@ public class RobotContainer {
     //  new DriveZero(drivebase),
     //  new setHeadingCorrection(drivebase, false)
     // );
-    // return new SequentialCommandGroup(
-    //   //new AutoShoot(shooter, 1),
-    //   new setHeadingCorrection(drivebase, true),
-    //   new ZeroGyro(drivebase),
-    //   drivebase.postPathplannerPath("2note1"),
-    //   new DriveZero(drivebase),
-    //   new runIntakeforTime(intakemaxxxer,0.5, 0.5),
-    //   drivebase.postPathplannerPath("2note2"),
-    //  new DriveZero(drivebase),
-    //  //new AutoShoot(shooter,1)
-    //  new setHeadingCorrection(drivebase, false)
-    // );
-    //return drivebase.getAutonomousCommand("4NoteSpeakerMid");
-    return oneNote;
-
+    return new SequentialCommandGroup(
+      //new AutoShoot(shooter, 1),
+      new setHeadingCorrection(drivebase, true),
+      new ZeroGyro(drivebase),
+      drivebase.postPathplannerPath("2note1"),
+      new DriveZero(drivebase),
+      new runIntakeforTime(intakemaxxxer,0.5, 0.5),
+      drivebase.postPathplannerPath("2note2"),
+     new DriveZero(drivebase),
+     //new AutoShoot(shooter,1)
+     new setHeadingCorrection(drivebase, false)
+    );
     
-
-   // return drivebase.getAutonomousCommand("2NoteSpeakerMid");
 }
 }
 

@@ -112,6 +112,7 @@ public class Shooter extends SubsystemBase {
        
        
     }
+    //state enums
     public static enum PivotState{
         SPEAKERSHOOT,
         TRANSFER,
@@ -125,15 +126,13 @@ public class Shooter extends SubsystemBase {
         AMP,
         DEFAULT
     }
-    public double getAverageRollerSpeed(){
-        return (shootmotorone.get() + shootmotortwo.get())/2;
-    }
     public void setPivot(PivotState state){
         this.pivotState = state;
     }
     public void setShoot(ShooterState state){
-
+        this.shooterState = state;
     }
+    //commands for shooter functoins
     public Command setPivotMode(PivotState state){
         return run(() -> setPivot(state));
     }
@@ -143,6 +142,8 @@ public class Shooter extends SubsystemBase {
     public Command shootNote(){
         return run(() -> shoot(1));
     }
+
+    //calculates outputs based on desired degree
     public void calcAndApplyControllers(){
         pidOutput = -pivotController.calculate(getPivotAngle(), pivotGoal.getDegrees());
         State profSetpoint = pivotController.getSetpoint();
@@ -170,13 +171,14 @@ public class Shooter extends SubsystemBase {
         
     }  
 
-
+    //gets the current pivot angle from the CanCoder
     public double getPivotAngle(){
        return (Rotation2d.fromRotations(encoder.getAbsolutePosition().getValue())).getDegrees() + encoderOffset;
     }
     //public double getNavxPitch(){
       //  return navx.getPitch();
     //}
+    // shoots a note
     public void shoot(double speed){
         // if (speed != 0) {
         //     l.setMode(STATUS.SHOOTING);
@@ -187,15 +189,19 @@ public class Shooter extends SubsystemBase {
         shootmotorone.set(speed);
         shootmotortwo.set(speed);
     }
+    //used for setting pivot 
     public void pivot(double speed){
        // pivotmotorone.set(speed);
     }
+    // a bunch of unused methods 
     public double getPosition(){
         return pivotmotorone.getEncoder().getPosition();
     }
     public double getDegree(){
         return currentAngle;
     }
+
+    // wonder what this does
     public double getPivotVelocity(){
         return (encoder.getVelocity().getValue()) * (2*Math.PI);
     }
@@ -203,6 +209,8 @@ public class Shooter extends SubsystemBase {
     //     currentAngle = degree;
         
     // }
+
+    //sets the goal angle
     public void pivotToAngle(double angle){
         pivotGoal = Rotation2d.fromDegrees(angle);
         pivotController.reset(Rotation2d.fromDegrees(getPivotAngle()).getRadians(),getPivotVelocity());
@@ -210,6 +218,7 @@ public class Shooter extends SubsystemBase {
     public boolean isFalling(){
         return ((pivotmotorone.getOutputCurrent() == 0));
     }
+    //some more unused methods
     public void splinePivot(){
 
     }
